@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - FlyDreamAir</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <main class="auth-page">
+    <div class="auth-card">
+      <h1>Login</h1>
+      <p>Demo: demo@flydreamair.com / password123</p>
+      <div id="message" class="alert" style="display:none;"></div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email" value="demo@flydreamair.com" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" value="password123" />
+      </div>
+      <button class="btn btn-primary" style="width:100%;" onclick="loginUser()">Login</button>
+      <p style="margin-top:16px;">No account? <a href="register.html">Register here</a></p>
+    </div>
+  </main>
+  <script src="../js/main.js"></script>
+</body>
+</html>
