@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Trips – FlyDreamAir</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .tab-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--gray);
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+        }
+        .tab-btn:hover { background: var(--light-blue); color: var(--navy); }
+        .tab-btn.active { background: var(--light-blue); color: var(--navy); font-weight: 700; }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        .trip-card-new {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            margin-bottom: 20px;
+        }
+        .trip-card-new img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            min-height: 160px;
+        }
+        .trip-card-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="nav-logo">FlyDreamAir</a>
+    <ul class="nav-links">
+        <li><a href="index.html">Book</a></li>
+        <li><a href="manage.html" class="active">Manage</a></li>
+        <li><a href="shop.html">Shop</a></li>
+    </ul>
+    <span class="nav-icon" id="nav-user-icon">👤</span>
+</nav>
+
+<!-- ===== NOT LOGGED IN ===== -->
+<div id="view-loggedout" style="text-align:center; padding:100px 20px;">
+    <div style="font-size:64px;">✈️</div>
+    <h2 style="color:var(--navy); margin-top:20px; font-size:32px; font-weight:800;">Your Sky Bound Journey</h2>
+    <p style="color:var(--gray); margin-top:12px; font-size:16px; max-width:400px; margin-left:auto; margin-right:auto;">
+        Sign in to manage your upcoming flights and bookings.
+    </p>
+    <div style="display:flex; gap:12px; justify-content:center; margin-top:32px;">
+        <a href="login.html" class="btn btn-primary" style="padding:14px 32px; font-size:16px;">Sign In</a>
+        <a href="register.html" class="btn btn-outline" style="padding:14px 32px; font-size:16px;">Create Account</a>
+    </div>
+</div>
+
+<!-- ===== LOGGED IN ===== -->
+<div id="view-loggedin" style="display:none;">
+
+    <div style="padding:40px 40px 0; max-width:1100px; margin:0 auto;">
+        <h1 style="font-size:40px; font-weight:800; color:var(--navy);">Your Sky Bound Journey</h1>
+        <p style="color:var(--gray); margin-top:8px;">Welcome back, <strong id="greeting-name">there</strong>. Manage your upcoming adventures below.</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:220px 1fr; gap:40px; max-width:1100px; margin:32px auto; padding:0 40px;">
+
+        <!-- Sidebar -->
+        <div>
+            <!-- Profile card -->
+            <div style="border:1px solid var(--border); border-radius:16px; padding:24px; text-align:center; margin-bottom:16px;">
+                <div style="width:60px; height:60px; background:var(--light-blue); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:28px; margin:0 auto 12px;">🧑‍✈️</div>
+                <div id="profile-name" style="font-size:16px; font-weight:700; color:var(--navy);">–</div>
+                <div id="profile-tier" style="font-size:12px; color:var(--gold); font-weight:600; margin-top:4px;">Silver Member</div>
+                <div style="font-size:11px; color:var(--gray); margin-top:6px;">Dream Loyalty Member</div>
+            </div>
+
+            <!-- Nav buttons -->
+            <div style="display:flex; flex-direction:column; gap:4px;">
+                <button class="tab-btn active" onclick="switchTab('trips', this)">📋 My Trips</button>
+                <button class="tab-btn" onclick="switchTab('settings', this)">⚙️ Account Settings</button>
+                <button class="tab-btn" style="color:var(--danger);" onclick="logout()">🚪 Sign Out</button>
+            </div>
+        </div>
+
+        <!-- Main panels -->
+        <div>
+
+            <!-- MY TRIPS panel -->
+            <div id="panel-trips" class="tab-panel active">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <h2 style="font-size:22px; font-weight:700; color:var(--navy);">Upcoming Flights</h2>
+                    <span id="trip-count" style="font-size:14px; color:var(--gray);"></span>
+                </div>
+
+                <!-- Empty state -->
+                <div id="no-trips" style="display:none; text-align:center; padding:60px 20px; border:1px dashed var(--border); border-radius:16px;">
+                    <div style="font-size:48px;">✈️</div>
+                    <h3 style="color:var(--navy); margin-top:16px;">No upcoming trips yet</h3>
+                    <p style="color:var(--gray); margin-top:8px;">Book your first flight to get started.</p>
+                    <a href="flights.html?browse=true" class="btn btn-primary" style="margin-top:20px; display:inline-block;">Browse Flights</a>
+                </div>
+
+                <!-- Trip cards go here -->
+                <div id="trips-list"></div>
+            </div>
+
+            <!-- SETTINGS panel -->
+            <div id="panel-settings" class="tab-panel">
+                <h2 style="font-size:22px; font-weight:700; color:var(--navy); margin-bottom:20px;">Account Settings</h2>
+                <div style="border:1px solid var(--border); border-radius:16px; padding:32px; max-width:480px; background:white;">
+                    <div id="settings-msg" class="alert" style="display:none;"></div>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="inp-name" />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="inp-email" />
+                    </div>
+                    <div class="form-group">
+                        <label>New Password <span style="color:var(--gray); font-weight:400;">(leave blank to keep current)</span></label>
+                        <input type="password" id="inp-password" placeholder="New password" />
+                    </div>
+                    <button class="btn btn-primary" onclick="saveSettings()">Save Changes</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand"><h3>FlyDreamAir</h3><p>© 2024 FlyDreamAir. The Ethereal Anchor Experience.</p></div>
+        <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Center</a></li></ul></div>
+        <div class="footer-col"><h4>Legal</h4><ul><li><a href="#">Privacy Policy</a></li></ul></div>
+    </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+
+const DEST_IMAGES = {
+    "Tokyo":         "https://images.unsplash.com/photo-1750365866509-8e1f1cac473e?w=400&q=80",
+    "London":        "https://images.unsplash.com/photo-1526315337991-2ea805e212a8?w=400&q=80",
+    "New York":      "https://images.unsplash.com/photo-1499092346302-2cbed539c8a6?w=400&q=80",
+    "Paris":         "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&q=80",
+    "Bali":          "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&q=80",
+    "Singapore":     "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?w=400&q=80",
+    "Dubai":         "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400&q=80",
+    "San Francisco": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=400&q=80",
+    "Melbourne":     "https://images.unsplash.com/photo-1514395462725-fb4566210144?w=400&q=80",
+    "default":       "https://images.unsplash.com/photo-1756988182660-32f3a4fb3bde?w=400&q=80"
+};
+
+function getImg(city) {
+    for (const [k, v] of Object.entries(DEST_IMAGES)) {
+        if (city && city.includes(k)) return v;
+    }
+    return DEST_IMAGES.default;
+}
+
+// Switch between My Trips and Settings tabs
+function switchTab(tabName, btn) {
+    // Hide all panels
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+    // Deactivate all tab buttons
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    // Show selected panel and activate button
+    document.getElementById("panel-" + tabName).classList.add("active");
+    btn.classList.add("active");
+}
+
+function loadProfile() {
+    const user = getUser();
+    if (!user) return;
+    document.getElementById("greeting-name").textContent = user.name.split(" ")[0];
+    document.getElementById("profile-name").textContent  = user.name;
+    document.getElementById("profile-tier").textContent  = user.loyalty_tier || "Silver Member";
+    // Pre-fill settings form
+    document.getElementById("inp-name").value  = user.name;
+    document.getElementById("inp-email").value = user.email;
+}
+
+function loadTrips() {
+    const bookings = getMyBookings().filter(b => b.status === "confirmed");
+    const list      = document.getElementById("trips-list");
+    const noTrips   = document.getElementById("no-trips");
+    const countEl   = document.getElementById("trip-count");
+
+    countEl.textContent = bookings.length + " reservation(s)";
+
+    if (bookings.length === 0) {
+        list.innerHTML = "";
+        noTrips.style.display = "block";
+        return;
+    }
+
+    noTrips.style.display = "none";
+
+    list.innerHTML = bookings.map(b => `
+        <div class="trip-card-new">
+            <img src="${getImg(b.arrival_city)}" alt="${b.arrival_city}">
+            <div class="trip-card-body">
+                <div>
+                    <div style="display:flex; justify-content:space-between; align-items:start;">
+                        <div>
+                            <div style="font-size:22px; font-weight:800; color:var(--navy);">${b.arrival_city}</div>
+                            <div style="font-size:13px; color:var(--gray);">From ${b.departure_city}</div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-size:10px; color:var(--gray); font-weight:700; letter-spacing:0.5px;">CONFIRMATION</div>
+                            <div style="font-size:13px; font-weight:700; color:var(--navy);">${b.confirmation_code}</div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:8px; margin-top:16px; font-weight:600; color:var(--navy); font-size:15px;">
+                        <span>${b.departure_time}</span>
+                        <div style="flex:1; border-top:2px dashed var(--border);"></div>
+                        <span>✈️</span>
+                        <div style="flex:1; border-top:2px dashed var(--border);"></div>
+                        <span>${b.arrival_time}</span>
+                    </div>
+
+                    <div style="font-size:12px; color:var(--gray); margin-top:8px;">
+                        ${b.flight_number} &bull; ${formatDate(b.departure_date)}
+                        ${b.seat_number ? " &bull; Seat " + b.seat_number : ""}
+                        ${b.card_last4  ? " &bull; Card &bull;&bull;&bull;&bull;" + b.card_last4 : ""}
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top:16px; align-items:center;">
+                    <a href="shop.html" class="btn btn-outline" style="font-size:13px; padding:8px 14px;">✨ Add Services</a>
+                    <button style="background:none; border:none; color:var(--danger); font-weight:600; cursor:pointer; font-size:14px;"
+                        onclick="doCancel(${b.id})">Cancel Trip</button>
+                </div>
+            </div>
+        </div>
+    `).join("");
+}
+
+function doCancel(id) {
+    if (!confirm("Cancel this booking?")) return;
+    cancelBooking(id);
+    loadTrips();
+}
+
+function saveSettings() {
+    hideMessage("settings-msg");
+    const user     = getUser();
+    const name     = document.getElementById("inp-name").value.trim();
+    const email    = document.getElementById("inp-email").value.trim();
+    const password = document.getElementById("inp-password").value;
+
+    if (!name || !email) {
+        showMessage("settings-msg", "Name and email are required.", "error");
+        return;
+    }
+    try {
+        const updates = { name, email };
+        if (password) updates.password = password;
+        updateUserProfile(user.id, updates);
+        loadProfile();
+        showMessage("settings-msg", "Profile updated successfully!", "success");
+    } catch (err) {
+        showMessage("settings-msg", err.message, "error");
+    }
+}
+
+// On page load — decide which view to show
+window.addEventListener("DOMContentLoaded", function () {
+    if (isLoggedIn()) {
+        document.getElementById("view-loggedout").style.display = "none";
+        document.getElementById("view-loggedin").style.display  = "block";
+        loadProfile();
+        loadTrips();
+    } else {
+        document.getElementById("view-loggedout").style.display = "block";
+        document.getElementById("view-loggedin").style.display  = "none";
+    }
+});
+
+</script>
+</body>
+</html>

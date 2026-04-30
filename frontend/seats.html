@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Seat – FlyDreamAir</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="nav-logo">FlyDreamAir</a>
+    <ul class="nav-links">
+        <li><a href="index.html">Book</a></li>
+        <li><a href="manage.html" class="active">Manage</a></li>
+        <li><a href="shop.html">Shop</a></li>
+    </ul>
+    <span class="nav-icon" id="nav-user-icon" onclick="window.location.href='manage.html'">👤</span>
+</nav>
+
+<div class="page-layout">
+    <!-- LEFT: Seat map -->
+    <div>
+        <h1 style="font-size:36px; font-weight:800; color:var(--navy);">Choose Your Oasis</h1>
+        <p id="flight-subtitle" style="color:var(--gray); margin-top:6px; margin-bottom:28px;">
+            Loading flight details...
+        </p>
+
+        <!-- Legend -->
+        <div class="seat-legend">
+            <div class="legend-item">
+                <div class="legend-dot" style="background:var(--blue);"></div>
+                <span>Available</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background:#d1d5db;"></div>
+                <span>Occupied</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background:var(--gold);"></div>
+                <span>Selected</span>
+            </div>
+        </div>
+
+        <!-- Seat map rendered here -->
+        <div class="seat-map-container">
+            <div id="seat-map">
+                <div class="loading"><div class="spinner"></div><p>Loading seat map...</p></div>
+            </div>
+            <p style="margin-top:16px; font-size:13px; color:var(--gray);">AFT SECTION</p>
+        </div>
+    </div>
+
+    <!-- RIGHT: Selection info -->
+    <div class="sidebar">
+        <div class="sidebar-card">
+            <h3>Current Selection</h3>
+            <div id="selected-seat-label" style="font-size:48px; font-weight:800; color:var(--navy); margin-bottom:16px;">–</div>
+
+            <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
+                <div class="summary-row">
+                    <span class="summary-label">Class</span>
+                    <span id="seat-class" style="font-weight:600;">–</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Legroom</span>
+                    <span id="seat-legroom" style="font-weight:600;">–</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Amenities</span>
+                    <span id="seat-amenities" style="font-weight:600;">–</span>
+                </div>
+            </div>
+
+            <hr style="border:none; border-top:1px solid var(--border); margin-bottom:16px;">
+
+            <div class="summary-row">
+                <span class="summary-label">Base Seat Fare</span>
+                <span>$0.00</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Preferred Zone Fee</span>
+                <span id="zone-fee">–</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total</span>
+                <span id="seat-total">–</span>
+            </div>
+
+            <button class="btn btn-gold" style="width:100%; margin-top:16px;" id="confirm-btn" onclick="confirmSeat()">
+                Confirm Seat
+            </button>
+            <p style="font-size:11px; color:var(--gray); text-align:center; margin-top:8px;">
+                Selection can be modified up to 24 hours before departure.
+            </p>
+
+            <!-- Cabin preview image -->
+            <div style="margin-top:20px; border-radius:12px; overflow:hidden;">
+                <img src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=400" 
+                     style="width:100%; height:140px; object-fit:cover;" alt="Dreamliner 787 Cabin">
+                <div style="background:var(--navy); color:white; padding:8px 12px; font-size:12px; font-weight:600;">
+                    Dreamliner 787 Cabin View
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/main.js"></script>
+<script>
+    requireLogin();
+
+    const params = new URLSearchParams(window.location.search);
+    const bookingId = params.get("booking_id");
+    const flightId = params.get("flight_id");
+
+    let selectedSeat = null;
+    let takenSeats = [];
+
+    // Seat layout: rows 1-14, columns A B [gap] C D E [gap] F G
+    const ROWS = [1, 2, 12, 13, 14];   // show a subset like the mockup
+    const COLS = ["A", "B", "C", "D", "E", "F", "G"];
+
+    // Seat pricing zones
+    function getSeatPrice(row, col) {
+        if (row <= 5) return 45;    // front = preferred
+        if (col === "A" || col === "G") return 25; // window
+        return 0;
+    }
+
+    function getSeatClass(row) {
+        if (row <= 3) return "Business";
+        if (row <= 8) return "Economy Plus";
+        return "Economy";
+    }
+
+    async function loadSeats() {
+        try {
+            // Get taken seats from API
+            const data = await apiRequest(`/flights/${flightId}/seats`);
+            takenSeats = data.taken_seats || [];
+            renderSeatMap();
+        } catch (err) {
+            // If API fails, render with no taken seats
+            renderSeatMap();
+        }
+    }
+
+    function renderSeatMap() {
+        const map = document.getElementById("seat-map");
+        
+        let html = '<div class="seat-cabin">';
+
+        // Column labels
+        html += '<div class="seat-row" style="margin-bottom:8px;">';
+        html += '<div class="seat-row-num"></div>';
+        COLS.forEach((col, i) => {
+            if (i === 2) html += '<div class="seat-gap"></div>';  // aisle gap
+            html += `<div style="width:30px; font-size:11px; color:var(--gray); text-align:center;">${col}</div>`;
+        });
+        html += '</div>';
+
+        // Rows
+        ROWS.forEach(row => {
+            html += '<div class="seat-row">';
+            html += `<div class="seat-row-num">${row}</div>`;
+            
+            COLS.forEach((col, i) => {
+                if (i === 2) html += '<div class="seat-gap"></div>';
+
+                const seatId = `${row}${col}`;
+                const isTaken = takenSeats.includes(seatId);
+                const seatClass = isTaken ? "seat occupied" : "seat available";
+
+                html += `<button class="${seatClass}" id="seat-${seatId}" 
+                    ${isTaken ? 'disabled' : ''} 
+                    onclick="selectSeat('${seatId}', ${row}, '${col}')">
+                    ${col}
+                </button>`;
+            });
+
+            html += '</div>';
+        });
+
+        html += '</div>';
+        map.innerHTML = html;
+
+        document.getElementById("flight-subtitle").textContent =
+            `Select a seat from the 2-3-2 configuration below.`;
+    }
+
+    function selectSeat(seatId, row, col) {
+        // Deselect previous
+        if (selectedSeat) {
+            const prevBtn = document.getElementById(`seat-${selectedSeat}`);
+            if (prevBtn) prevBtn.classList.replace("selected", "available");
+        }
+
+        // Select new seat
+        selectedSeat = seatId;
+        const btn = document.getElementById(`seat-${seatId}`);
+        btn.classList.replace("available", "selected");
+
+        // Update sidebar info
+        document.getElementById("selected-seat-label").textContent = seatId;
+        document.getElementById("seat-class").textContent = getSeatClass(row);
+        document.getElementById("seat-legroom").textContent = row <= 5 ? "34 inches" : "30 inches";
+        document.getElementById("seat-amenities").textContent = row <= 5 ? "USB-C, Extra Width" : "USB-A";
+
+        const price = getSeatPrice(row, col);
+        document.getElementById("zone-fee").textContent = `$${price.toFixed(2)}`;
+        document.getElementById("seat-total").textContent = `$${price.toFixed(2)}`;
+        document.getElementById("confirm-btn").textContent = `Confirm Seat ${seatId}`;
+    }
+
+    async function confirmSeat() {
+        if (!selectedSeat) {
+            alert("Please select a seat first.");
+            return;
+        }
+
+        try {
+            await apiRequest(`/bookings/${bookingId}/seat`, "PUT", {
+                seat_number: selectedSeat
+            });
+
+            // Go to shop page or confirmation
+            window.location.href = `shop.html?booking_id=${bookingId}`;
+        } catch (err) {
+            alert("Could not save seat: " + err.message);
+        }
+    }
+
+    loadSeats();
+</script>
+</body>
+</html>
