@@ -15,7 +15,7 @@
         <li><a href="manage.html">Manage</a></li>
         <li><a href="shop.html">Shop</a></li>
     </ul>
-    <span class="nav-icon" id="nav-user-icon" onclick="window.location.href='manage.html'">👤</span>
+    <span class="nav-icon">👤</span>
 </nav>
 
 <div class="auth-container">
@@ -29,20 +29,25 @@
             <label>Full Name</label>
             <input type="text" id="name" placeholder="Alex Stratos" />
         </div>
+
         <div class="form-group">
             <label>Email Address</label>
             <input type="email" id="email" placeholder="you@example.com" />
         </div>
+
         <div class="form-group">
             <label>Password</label>
             <input type="password" id="password" placeholder="At least 6 characters" />
         </div>
+
         <div class="form-group">
             <label>Confirm Password</label>
-            <input type="password" id="confirm" placeholder="Repeat your password" />
+            <input type="password" id="confirm-password" placeholder="Repeat your password" />
         </div>
 
-        <button class="btn btn-primary" style="width:100%; margin-top:8px;" onclick="doRegister()">Create Account</button>
+        <button class="btn btn-primary" style="width:100%; margin-top:8px;" onclick="register()">
+            Create Account
+        </button>
 
         <div class="auth-switch">
             Already have an account? <a href="login.html">Sign in</a>
@@ -52,30 +57,39 @@
 
 <script src="../js/main.js"></script>
 <script>
-    if (isLoggedIn()) window.location.href = "manage.html";
-
-    function doRegister() {
+    async function register() {
         hideMessage("message");
-        const name     = document.getElementById("name").value.trim();
-        const email    = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-        const confirm  = document.getElementById("confirm").value;
 
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const confirm = document.getElementById("confirm-password").value;
+
+        // Validation
         if (!name || !email || !password) {
-            showMessage("message", "Please fill in all fields.", "error"); return;
+            showMessage("message", "Please fill in all fields.", "error");
+            return;
         }
         if (password.length < 6) {
-            showMessage("message", "Password must be at least 6 characters.", "error"); return;
+            showMessage("message", "Password must be at least 6 characters.", "error");
+            return;
         }
         if (password !== confirm) {
-            showMessage("message", "Passwords do not match.", "error"); return;
+            showMessage("message", "Passwords do not match.", "error");
+            return;
         }
+
         try {
-            const user = registerUser(name, email, password);
-            saveToken("local-token-" + user.id);
-            saveUser(user);
-            showMessage("message", "Account created! Taking you to your dashboard...", "success");
-            setTimeout(() => window.location.href = "manage.html", 1200);
+            // Register the user
+            await apiRequest("/users/register", "POST", { name, email, password });
+
+            showMessage("message", "Account created! Redirecting to login...", "success");
+
+            // Wait 1.5 seconds then go to login
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 1500);
+
         } catch (err) {
             showMessage("message", err.message, "error");
         }

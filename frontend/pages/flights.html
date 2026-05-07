@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Flights – FlyDreamAir</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="nav-logo">FlyDreamAir</a>
+    <ul class="nav-links">
+        <li><a href="index.html" class="active">Book</a></li>
+        <li><a href="manage.html">Manage</a></li>
+        <li><a href="shop.html">Shop</a></li>
+    </ul>
+    <span class="nav-icon" id="nav-user-icon" onclick="window.location.href='manage.html#settings'">👤</span>
+</nav>
+
+<div class="page-layout" style="margin-top:32px;">
+    <!-- LEFT: Flight list -->
+    <div>
+        <h1 style="font-size:36px; font-weight:800; color:var(--navy);">Available Flights</h1>
+        <p id="route-subtitle" style="color:var(--gray); margin-top:6px; margin-bottom:24px;"></p>
+
+        <div id="message" class="alert alert-error" style="display:none;"></div>
+        <div id="flights-container">
+            <div class="loading"><div class="spinner"></div><p>Searching flights...</p></div>
+        </div>
+    </div>
+
+    <!-- RIGHT: Booking summary sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-card">
+            <h3>🛒 Booking Summary</h3>
+
+            <div class="summary-row">
+                <div>
+                    <div style="font-size:12px; color:var(--gray);">Departure</div>
+                    <div style="font-weight:600; color:var(--navy);" id="summary-departure">–</div>
+                </div>
+                <span>✈️</span>
+            </div>
+
+            <div class="summary-row" style="margin-top:12px;">
+                <div>
+                    <div style="font-size:12px; color:var(--gray);">Arrival</div>
+                    <div style="font-weight:600; color:var(--navy);" id="summary-arrival">–</div>
+                </div>
+                <span>🛬</span>
+            </div>
+
+            <hr style="margin:16px 0; border:none; border-top:1px solid var(--border);">
+
+            <div class="summary-row">
+                <span class="summary-label">Base Fare</span>
+                <span id="summary-fare">–</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Taxes & Fees</span>
+                <span id="summary-tax">–</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total Price</span>
+                <span id="summary-total">–</span>
+            </div>
+
+            <button class="btn btn-gold" style="width:100%; margin-top:16px;" onclick="confirmBooking()">
+                ✓ Confirm Booking
+            </button>
+            <p style="font-size:11px; color:var(--gray); text-align:center; margin-top:8px;">
+                By clicking confirm, you agree to our Travel Policy.
+            </p>
+        </div>
+
+        <!-- Upgrade card -->
+        <div style="background:var(--navy); color:white; border-radius:12px; padding:20px; margin-top:16px; text-align:center;">
+            <div style="font-weight:700; margin-bottom:6px;">Upgrade to DreamCloud</div>
+            <p style="font-size:13px; opacity:0.8; margin-bottom:12px;">Access exclusive lounges and priority boarding for $45.</p>
+            <button class="btn" style="background:var(--gold); color:white; font-size:13px;" onclick="alert('DreamCloud upgrade added!')">Learn More</button>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <h3>FlyDreamAir</h3>
+            <p>© 2024 FlyDreamAir. The Ethereal Anchor Experience.</p>
+        </div>
+        <div class="footer-col">
+            <ul>
+                <li><a href="#">Flight Status</a></li>
+                <li><a href="#">Help Center</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script src="../js/main.js"></script>
+<script>
+    // Selected flight stored here
+    let selectedFlight = null;
+
+    // Get search params from URL
+    const params = new URLSearchParams(window.location.search);
+    const from = params.get("from") || "New York (JFK)";
+    const to = params.get("to") || "London (LHR)";
+    const departure = params.get("departure") || new Date().toISOString().split("T")[0];
+
+    // Show route info
+    document.getElementById("route-subtitle").textContent = `${from} to ${to} • ${formatDate(departure)}`;
+
+    // Load flights from API.
+    // For demo reliability, fall back to route-only results if no flight exists for the selected date.
+    async function loadFlights() {
+        try {
+            let endpoint = `/flights?departure_city=${encodeURIComponent(from)}&arrival_city=${encodeURIComponent(to)}&date=${departure}`;
+            if (isBrowse) endpoint = "/flights";
+
+            let flights = await apiRequest(endpoint);
+
+            // The database uses sample dates, so a real current date may return nothing.
+            // Retry without date so the prototype still demonstrates the booking flow.
+            if (!isBrowse && flights.length === 0) {
+                flights = await apiRequest(`/flights?departure_city=${encodeURIComponent(from)}&arrival_city=${encodeURIComponent(to)}`);
+                if (flights.length > 0) {
+                    showMessage("message", "No flights were available on that exact date, so we are showing the nearest matching route options.", "success");
+                }
+            }
+
+            renderFlights(flights);
+        } catch (err) {
+            document.getElementById("flights-container").innerHTML = `
+                <div class="alert alert-error">Could not load flights. Make sure the backend is running.</div>`;
+        }
+    }
+
+    function renderFlights(flights) {
+        const container = document.getElementById("flights-container");
+
+        if (flights.length === 0) {
+            container.innerHTML = `<p style="color:var(--gray)">No flights found for this route and date.</p>`;
+            return;
+        }
+
+        container.innerHTML = flights.map((flight, index) => `
+            <div class="flight-card" id="flight-${flight.id}" onclick="selectFlight(${JSON.stringify(flight).replace(/"/g, '&quot;')})">
+                ${index === 1 ? '<div class="badge-popular">DREAM CLASS CHOICE</div>' : ''}
+                <div class="flight-time">
+                    <div>
+                        <div class="time">${flight.departure_time}</div>
+                        <div class="airport">${flight.departure_city}</div>
+                    </div>
+
+                    <div class="flight-route-line">
+                        <div class="duration">${flight.duration} (Direct)</div>
+                        <div class="line">✈️</div>
+                    </div>
+
+                    <div>
+                        <div class="time">${flight.arrival_time}</div>
+                        <div class="airport">${flight.arrival_city}</div>
+                    </div>
+                </div>
+
+                <div class="flight-price">
+                    <div class="from">From</div>
+                    <div class="amount">$${flight.price.toFixed(2)}</div>
+                    <button class="btn btn-primary" style="margin-top:8px;" onclick="event.stopPropagation(); selectFlight(${JSON.stringify(flight).replace(/"/g, '&quot;')})">Select</button>
+                </div>
+            </div>
+        `).join("");
+    }
+
+    function selectFlight(flight) {
+        // Deselect all cards
+        document.querySelectorAll(".flight-card").forEach(card => card.classList.remove("selected"));
+        // Select this card
+        document.getElementById(`flight-${flight.id}`).classList.add("selected");
+
+        selectedFlight = flight;
+
+        // Update sidebar
+        document.getElementById("summary-departure").textContent = `${flight.departure_city} • ${flight.departure_time}`;
+        document.getElementById("summary-arrival").textContent = `${flight.arrival_city} • ${flight.arrival_time}`;
+
+        const tax = (flight.price * 0.188).toFixed(2);  // ~18.8% tax
+        document.getElementById("summary-fare").textContent = `$${flight.price.toFixed(2)}`;
+        document.getElementById("summary-tax").textContent = `$${tax}`;
+        document.getElementById("summary-total").textContent = `$${(parseFloat(flight.price) + parseFloat(tax)).toFixed(2)}`;
+    }
+
+    async function confirmBooking() {
+        if (!selectedFlight) {
+            alert("Please select a flight first.");
+            return;
+        }
+
+        if (!getToken()) {
+            // Save selection and continue the booking after login.
+            sessionStorage.setItem("pending_flight", JSON.stringify(selectedFlight));
+            sessionStorage.setItem("after_login", "complete_booking");
+            window.location.href = "login.html";
+            return;
+        }
+
+        const button = document.querySelector('.sidebar-card .btn-gold');
+        if (button) {
+            button.disabled = true;
+            button.textContent = "Creating booking...";
+        }
+
+        try {
+            const booking = await apiRequest("/bookings", "POST", {
+                flight_id: selectedFlight.id
+            });
+
+            // Go to seat selection with booking ID
+            window.location.href = `seats.html?booking_id=${booking.id}&flight_id=${selectedFlight.id}`;
+        } catch (err) {
+            showMessage("message", err.message);
+            if (button) {
+                button.disabled = false;
+                button.textContent = "✓ Confirm Booking";
+            }
+        }
+    }
+
+    // If browse=true (came from View All Destinations), show all flights instead of searching
+    const isBrowse = params.get("browse") === "true";
+    if (isBrowse) {
+        document.querySelector("h1").textContent = "All Destinations";
+        document.getElementById("route-subtitle").textContent = "Browse all available flights and routes.";
+    }
+    loadFlights();
+</script>
+</body>
+</html>

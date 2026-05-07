@@ -128,6 +128,19 @@ def get_current_user_id(token: str = Depends(oauth2_scheme)) -> int:
     """Extract and validate user ID from token (used as a dependency)."""
     return decode_token(token)
 
+def calculate_seat_fee(seat_number: str) -> float:
+    """Mirror the frontend seat pricing rules so booking totals stay correct."""
+    try:
+        row = int(''.join(ch for ch in seat_number if ch.isdigit()))
+        col = ''.join(ch for ch in seat_number if ch.isalpha()).upper()
+    except ValueError:
+        return 0.0
+    if row <= 5:
+        return 45.0
+    if col in {"A", "G"}:
+        return 25.0
+    return 0.0
+
 
 # ===========================
 # AUTH ROUTES
@@ -352,12 +365,16 @@ def update_seat(booking_id: int, data: SeatUpdate, user_id: int = Depends(get_cu
     if cursor.fetchone():
         raise HTTPException(status_code=400, detail="Seat already taken")
 
+    old_fee = calculate_seat_fee(booking["seat_number"]) if booking.get("seat_number") else 0.0
+    new_fee = calculate_seat_fee(data.seat_number)
+    fee_difference = new_fee - old_fee
+
     cursor.execute(
-        "UPDATE bookings SET seat_number = %s WHERE id = %s",
-        (data.seat_number, booking_id)
+        "UPDATE bookings SET seat_number = %s, total_price = total_price + %s WHERE id = %s",
+        (data.seat_number, fee_difference, booking_id)
     )
     conn.commit()
-    return {"message": f"Seat {data.seat_number} confirmed"}
+    return {"message": f"Seat {data.seat_number} confirmed", "seat_fee": new_fee}
 
 
 @app.put("/bookings/{booking_id}/cancel")
@@ -388,6 +405,9 @@ def order_services(booking_id: int, data: ServicesOrder, user_id: int = Depends(
     cursor.execute("SELECT id FROM bookings WHERE id = %s AND user_id = %s", (booking_id, user_id))
     if not cursor.fetchone():
         raise HTTPException(status_code=404, detail="Booking not found")
+
+    if not data.items:
+        raise HTTPException(status_code=400, detail="No service items supplied")
 
     # Insert each service item
     for item in data.items:

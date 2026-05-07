@@ -15,7 +15,7 @@
         <li><a href="manage.html" class="active">Manage</a></li>
         <li><a href="shop.html">Shop</a></li>
     </ul>
-    <span class="nav-icon" id="nav-user-icon" onclick="window.location.href='manage.html'">👤</span>
+    <span class="nav-icon" id="nav-user-icon" onclick="window.location.href='manage.html#settings'">👤</span>
 </nav>
 
 <div class="page-layout">
@@ -116,6 +116,7 @@
 
     let selectedSeat = null;
     let takenSeats = [];
+    let currentBooking = null;
 
     // Seat layout: rows 1-14, columns A B [gap] C D E [gap] F G
     const ROWS = [1, 2, 12, 13, 14];   // show a subset like the mockup
@@ -135,6 +136,22 @@
     }
 
     async function loadSeats() {
+        if (!bookingId || !flightId) {
+            document.getElementById("seat-map").innerHTML = `<div class="alert alert-error">Missing booking information. Please choose a flight again.</div>`;
+            document.getElementById("confirm-btn").disabled = true;
+            return;
+        }
+
+        try {
+            currentBooking = await apiRequest(`/bookings/${bookingId}`);
+            document.getElementById("flight-subtitle").textContent =
+                `${currentBooking.flight_number}: ${currentBooking.departure_city} to ${currentBooking.arrival_city} • ${formatDate(currentBooking.departure_date)}`;
+        } catch (err) {
+            document.getElementById("seat-map").innerHTML = `<div class="alert alert-error">Could not load this booking. Please go back to Manage Trips.</div>`;
+            document.getElementById("confirm-btn").disabled = true;
+            return;
+        }
+
         try {
             // Get taken seats from API
             const data = await apiRequest(`/flights/${flightId}/seats`);
@@ -185,8 +202,10 @@
         html += '</div>';
         map.innerHTML = html;
 
-        document.getElementById("flight-subtitle").textContent =
-            `Select a seat from the 2-3-2 configuration below.`;
+        if (!currentBooking) {
+            document.getElementById("flight-subtitle").textContent =
+                `Select a seat from the 2-3-2 configuration below.`;
+        }
     }
 
     function selectSeat(seatId, row, col) {
@@ -220,6 +239,10 @@
         }
 
         try {
+            const button = document.getElementById("confirm-btn");
+            button.disabled = true;
+            button.textContent = "Saving seat...";
+
             await apiRequest(`/bookings/${bookingId}/seat`, "PUT", {
                 seat_number: selectedSeat
             });
@@ -227,6 +250,9 @@
             // Go to shop page or confirmation
             window.location.href = `shop.html?booking_id=${bookingId}`;
         } catch (err) {
+            const button = document.getElementById("confirm-btn");
+            button.disabled = false;
+            button.textContent = selectedSeat ? `Confirm Seat ${selectedSeat}` : "Confirm Seat";
             alert("Could not save seat: " + err.message);
         }
     }

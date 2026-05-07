@@ -15,7 +15,7 @@
         <li><a href="manage.html">Manage</a></li>
         <li><a href="shop.html" class="active">Shop</a></li>
     </ul>
-    <span class="nav-icon" id="nav-user-icon" onclick="window.location.href='manage.html'">👤</span>
+    <span class="nav-icon" id="nav-user-icon" onclick="window.location.href='manage.html#settings'">👤</span>
 </nav>
 
 <div class="market-layout">
@@ -215,6 +215,10 @@
         document.getElementById("seat-info").textContent = `BOOKING #${bookingId}`;
         // Load current booking info
         loadBookingInfo();
+    } else {
+        document.getElementById("flight-code").textContent = "No booking selected";
+        document.getElementById("flight-route").textContent = "Choose a trip before ordering services.";
+        document.getElementById("seat-info").textContent = "NO BOOKING SELECTED";
     }
 
     async function loadBookingInfo() {
@@ -310,6 +314,18 @@
             return;
         }
 
+        if (!bookingId) {
+            alert("Please open services from an existing booking so the order can be saved.");
+            window.location.href = "manage.html";
+            return;
+        }
+
+        const checkoutButton = document.querySelector('.sidebar-card .btn-gold');
+        if (checkoutButton) {
+            checkoutButton.disabled = true;
+            checkoutButton.textContent = "Processing...";
+        }
+
         try {
             const items = cart.map(item => ({
                 service_name: item.name,
@@ -317,19 +333,19 @@
                 unit_price: item.price
             }));
 
-            if (bookingId) {
-                await apiRequest(`/bookings/${bookingId}/services`, "POST", { items });
-            }
+            await apiRequest(`/bookings/${bookingId}/services`, "POST", { items });
 
             alert("Order placed successfully! Enjoy your flight. ✈️");
             cart = [];
             renderCart();
 
-            if (bookingId) {
-                window.location.href = "manage.html";
-            }
+            window.location.href = "manage.html";
 
         } catch (err) {
+            if (checkoutButton) {
+                checkoutButton.disabled = false;
+                checkoutButton.textContent = "Checkout Now";
+            }
             alert("Could not process order: " + err.message);
         }
     }
