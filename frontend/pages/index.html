@@ -104,7 +104,7 @@
 <div class="cta-banner">
     <h2>Ready for Departure?</h2>
     <p>Join the FlyDreamAir circle and unlock exclusive rewards, private lounge access, and first-class upgrades.</p>
-    <div class="cta-banner-btns">
+    <div class="cta-banner-btns" id="home-cta-actions">
         <a href="register.html" class="btn btn-gold">Create Account</a>
         <a href="#" class="btn btn-outline" style="border-color:white; color:white;">Learn More</a>
     </div>
@@ -155,8 +155,8 @@
     document.getElementById("departure-input").value = today;
 
     function searchFlights() {
-        const from = document.getElementById("from-input").value;
-        const to = document.getElementById("to-input").value;
+        const from = document.getElementById("from-input").value.trim();
+        const to = document.getElementById("to-input").value.trim();
         const departure = document.getElementById("departure-input").value;
 
         if (!from || !to || !departure) {
@@ -170,18 +170,45 @@
     }
 
     function goTo(destination) {
-        document.getElementById("to-input").value = destination;
-        window.location.href = `flights.html?to=${destination}`;
+        const from = document.getElementById("from-input").value.trim() || "Sydney (SYD)";
+        const departure = document.getElementById("departure-input").value || today;
+        const params = new URLSearchParams({ from, to: destination, departure });
+        window.location.href = `flights.html?${params}`;
     }
 
     function goToAccount() {
-        const user = getUser();
-        if (user) {
+        if (isLoggedIn()) {
             window.location.href = "manage.html#settings";
         } else {
             window.location.href = "login.html";
         }
     }
+
+    function updateHomeAuthUI() {
+        const actions = document.getElementById("home-cta-actions");
+        const footerAccountLinks = document.querySelectorAll('.footer-col h4');
+        if (!actions || !isLoggedIn()) return;
+
+        actions.innerHTML = `
+            <a href="manage.html#trips" class="btn btn-gold">Manage My Trips</a>
+            <a href="flights.html?browse=true" class="btn btn-outline" style="border-color:white; color:white;">Book Another Flight</a>
+        `;
+
+        document.querySelectorAll('a[href="register.html"]').forEach(link => {
+            if (link.closest("footer")) {
+                link.textContent = "My Profile";
+                link.href = "manage.html#settings";
+            }
+        });
+        document.querySelectorAll('a[href="login.html"]').forEach(link => {
+            if (link.closest("footer")) {
+                link.textContent = "My Trips";
+                link.href = "manage.html#trips";
+            }
+        });
+    }
+
+    updateHomeAuthUI();
 </script>
 </body>
 </html>

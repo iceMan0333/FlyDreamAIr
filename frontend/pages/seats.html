@@ -22,9 +22,10 @@
     <!-- LEFT: Seat map -->
     <div>
         <h1 style="font-size:36px; font-weight:800; color:var(--navy);">Choose Your Oasis</h1>
-        <p id="flight-subtitle" style="color:var(--gray); margin-top:6px; margin-bottom:28px;">
+        <p id="flight-subtitle" style="color:var(--gray); margin-top:6px; margin-bottom:12px;">
             Loading flight details...
         </p>
+        <div class="booking-progress"><div class="progress-step done">1 Flight</div><div class="progress-step active">2 Seat</div><div class="progress-step">3 Extras</div><div class="progress-step">4 Confirm</div></div>
 
         <!-- Legend -->
         <div class="seat-legend">
@@ -248,6 +249,7 @@
             });
 
             // Go to shop page or confirmation
+            showToast(`Seat ${selectedSeat} saved`);
             window.location.href = `shop.html?booking_id=${bookingId}`;
         } catch (err) {
             const button = document.getElementById("confirm-btn");

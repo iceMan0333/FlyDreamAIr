@@ -22,7 +22,8 @@
     <!-- LEFT: Flight list -->
     <div>
         <h1 style="font-size:36px; font-weight:800; color:var(--navy);">Available Flights</h1>
-        <p id="route-subtitle" style="color:var(--gray); margin-top:6px; margin-bottom:24px;"></p>
+        <p id="route-subtitle" style="color:var(--gray); margin-top:6px; margin-bottom:12px;"></p>
+        <div class="booking-progress"><div class="progress-step active">1 Flight</div><div class="progress-step">2 Seat</div><div class="progress-step">3 Extras</div><div class="progress-step">4 Confirm</div></div>
 
         <div id="message" class="alert alert-error" style="display:none;"></div>
         <div id="flights-container">
@@ -132,6 +133,13 @@
                 }
             }
 
+            if (!isBrowse && flights.length === 0 && to) {
+                flights = await apiRequest(`/flights?arrival_city=${encodeURIComponent(to)}`);
+                if (flights.length > 0) {
+                    showMessage("message", `Showing available flights to ${to}.`, "success");
+                }
+            }
+
             renderFlights(flights);
         } catch (err) {
             document.getElementById("flights-container").innerHTML = `
@@ -143,11 +151,19 @@
         const container = document.getElementById("flights-container");
 
         if (flights.length === 0) {
-            container.innerHTML = `<p style="color:var(--gray)">No flights found for this route and date.</p>`;
+            container.innerHTML = `
+                <div class="empty-state" style="background:white; border:1px solid var(--border); border-radius:12px; padding:28px; text-align:center;">
+                    <div style="font-size:42px; margin-bottom:8px;">🔎</div>
+                    <h3 style="color:var(--navy); margin-bottom:8px;">No flights found</h3>
+                    <p style="color:var(--gray); margin-bottom:18px;">Try browsing all destinations or searching for Sydney (SYD) to one of the featured destinations.</p>
+                    <a href="flights.html?browse=true" class="btn btn-primary">Browse All Flights</a>
+                </div>`;
             return;
         }
 
-        container.innerHTML = flights.map((flight, index) => `
+        container.innerHTML = flights.map((flight, index) => {
+            const meta = flightMeta(flight);
+            return `
             <div class="flight-card" id="flight-${flight.id}" onclick="selectFlight(${JSON.stringify(flight).replace(/"/g, '&quot;')})">
                 ${index === 1 ? '<div class="badge-popular">DREAM CLASS CHOICE</div>' : ''}
                 <div class="flight-time">
@@ -157,7 +173,7 @@
                     </div>
 
                     <div class="flight-route-line">
-                        <div class="duration">${flight.duration} (Direct)</div>
+                        <div class="duration">${flight.duration} • Direct</div>
                         <div class="line">✈️</div>
                     </div>
 
@@ -167,13 +183,20 @@
                     </div>
                 </div>
 
+                <div class="flight-meta-row">
+                    <span class="pill">Aircraft <strong>${meta.aircraft}</strong></span>
+                    <span class="pill">Gate <strong>${meta.gate}</strong></span>
+                    <span class="pill">Seats left <strong>${meta.seatsLeft}</strong></span>
+                    <span class="pill">Flight <strong>${flight.flight_number}</strong></span>
+                </div>
+
                 <div class="flight-price">
                     <div class="from">From</div>
-                    <div class="amount">$${flight.price.toFixed(2)}</div>
+                    <div class="amount">$${Number(flight.price).toFixed(2)}</div>
                     <button class="btn btn-primary" style="margin-top:8px;" onclick="event.stopPropagation(); selectFlight(${JSON.stringify(flight).replace(/"/g, '&quot;')})">Select</button>
                 </div>
-            </div>
-        `).join("");
+            </div>`;
+        }).join("");
     }
 
     function selectFlight(flight) {
@@ -212,6 +235,7 @@
         if (button) {
             button.disabled = true;
             button.textContent = "Creating booking...";
+            showToast("Creating your booking...");
         }
 
         try {

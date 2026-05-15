@@ -105,7 +105,7 @@
 
             <div class="product-grid" style="margin-top:16px;">
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400" alt="Amenity Kit">
+                    <img src="https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?w=400&q=80" alt="Amenity Kit">
                     <div class="product-card-body">
                         <h4>First-Class Amenity Kit</h4>
                         <p>L'Occitane skincare, silk mask, and bamboo socks.</p>
@@ -117,7 +117,7 @@
                 </div>
 
                 <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=400" alt="Pillow">
+                    <img src="https://images.unsplash.com/photo-1590523278191-995cbcda646b?w=400&q=80" alt="Pillow">
                     <div class="product-card-body">
                         <h4>Cloud-Fiber Pillow</h4>
                         <p>Hypoallergenic ergonomic neck support.</p>
@@ -316,7 +316,7 @@
 
         if (!bookingId) {
             alert("Please open services from an existing booking so the order can be saved.");
-            window.location.href = "manage.html";
+            window.location.href = "manage.html#trips";
             return;
         }
 
@@ -335,11 +335,11 @@
 
             await apiRequest(`/bookings/${bookingId}/services`, "POST", { items });
 
-            alert("Order placed successfully! Enjoy your flight. ✈️");
+            showToast("Extras added to your booking");
             cart = [];
             renderCart();
 
-            window.location.href = "manage.html";
+            window.location.href = `confirmation.html?booking_id=${bookingId}&extras=1`;
 
         } catch (err) {
             if (checkoutButton) {

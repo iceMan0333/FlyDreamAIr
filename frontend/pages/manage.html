@@ -145,9 +145,9 @@
 
     // Check login - show prompt instead of hard redirect.
     // Important: do not use a top-level `return` here, because that breaks page JavaScript in browsers.
-    const isLoggedIn = Boolean(getToken());
+    const loggedInStatus = Boolean(getToken());
 
-    if (!isLoggedIn) {
+    if (!loggedInStatus) {
         document.querySelector(".manage-layout").innerHTML = `
             <div style="grid-column:1/-1; text-align:center; padding:80px 20px;">
                 <div style="font-size:60px;">✈️</div>
@@ -161,26 +161,9 @@
         `;
     }
 
-    // Trip images for destinations
-    const destinationImages = {
-        "Tokyo": "https://images.unsplash.com/photo-1750365866509-8e1f1cac473e?w=400&q=80",
-        "London": "https://images.unsplash.com/photo-1526315337991-2ea805e212a8?w=400&q=80",
-        "New York": "https://images.unsplash.com/photo-1499092346302-2cbed539c8a6?w=400&q=80",
-        "San Francisco": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=400&q=80",
-        "Paris": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&q=80",
-        "default": "https://images.unsplash.com/photo-1756988182660-32f3a4fb3bde?w=400&q=80"
-    };
-
-    function getDestinationImage(city) {
-        for (const [key, url] of Object.entries(destinationImages)) {
-            if (city && city.includes(key)) return url;
-        }
-        return destinationImages.default;
-    }
-
     // Load user profile
     async function loadProfile() {
-        if (profileLoaded || !isLoggedIn) return;
+        if (profileLoaded || !loggedInStatus) return;
         profileLoaded = true;
         try {
             const user = await apiRequest("/users/me");
@@ -197,7 +180,7 @@
 
     // Load bookings
     async function loadTrips() {
-        if (tripsLoaded || !isLoggedIn) return;
+        if (tripsLoaded || !loggedInStatus) return;
         tripsLoaded = true;
         try {
             const bookings = await apiRequest("/bookings/my");
@@ -246,8 +229,10 @@
                             <div class="trip-time-line"></div>
                             <span>${booking.arrival_time}</span>
                         </div>
-                        <div style="font-size:12px; color:var(--gray); margin-top:4px;">
-                            ${formatDate(booking.departure_date)} • Seat ${booking.seat_number || "not selected"} • $${Number(booking.total_price).toFixed(2)}
+                        <div class="trip-extra-grid">
+                            <div class="trip-extra"><span class="muted">Date</span><b>${formatDate(booking.departure_date)}</b></div>
+                            <div class="trip-extra"><span class="muted">Seat</span><b>${booking.seat_number || "Not selected"}</b></div>
+                            <div class="trip-extra"><span class="muted">Total</span><b>${money(booking.total_price)}</b></div>
                         </div>
                     </div>
 
@@ -257,6 +242,9 @@
                         </a>
                         <a href="shop.html?booking_id=${booking.id}" class="btn btn-outline" style="font-size:13px; padding:8px 14px;">
                             ✨ Add Services
+                        </a>
+                        <a href="confirmation.html?booking_id=${booking.id}" class="btn btn-primary" style="font-size:13px; padding:8px 14px;">
+                            🎫 View Pass
                         </a>
                         <button class="btn-danger" onclick="cancelBooking(${booking.id})">Cancel Trip</button>
                     </div>
@@ -270,7 +258,7 @@
 
         try {
             await apiRequest(`/bookings/${bookingId}/cancel`, "PUT");
-            alert("Booking cancelled.");
+            showToast("Booking cancelled");
             tripsLoaded = false;
             historyLoaded = false;
             loadTrips();
@@ -296,7 +284,7 @@
     }
 
     async function loadHistory() {
-        if (historyLoaded || !isLoggedIn) return;
+        if (historyLoaded || !loggedInStatus) return;
         historyLoaded = true;
         try {
             const bookings = await apiRequest("/bookings/my");

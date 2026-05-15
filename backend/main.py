@@ -142,6 +142,51 @@ def calculate_seat_fee(seat_number: str) -> float:
     return 0.0
 
 
+
+
+# Extra demo flight seed data used by the frontend destination cards.
+# The assignment prototype should stay demo-friendly even when the user picks
+# today's date, so these records are inserted/updated whenever the API starts.
+DEMO_FLIGHTS = [
+    ('FDA-301', 'Sydney (SYD)', 'Santorini, Greece', '09:30 AM', '07:45 PM', '2026-05-22', '20h 15m', 849.00),
+    ('FDA-302', 'Sydney (SYD)', 'Santorini, Greece', '08:00 PM', '06:10 AM', '2026-05-22', '20h 10m', 995.00),
+    ('FDA-401', 'Sydney (SYD)', 'Tokyo, Japan', '10:15 AM', '07:50 PM', '2026-05-20', '9h 35m', 1120.00),
+    ('FDA-402', 'Sydney (SYD)', 'Tokyo, Japan', '09:10 PM', '06:40 AM', '2026-05-20', '9h 30m', 1280.00),
+    ('FDA-501', 'Sydney (SYD)', 'Reykjavik, Iceland', '07:40 AM', '05:30 PM', '2026-05-24', '29h 50m', 645.00),
+    ('FDA-502', 'Sydney (SYD)', 'Reykjavik, Iceland', '10:20 PM', '08:25 AM', '2026-05-24', '30h 05m', 720.00),
+    ('FDA-601', 'Sydney (SYD)', 'Banff, Canada', '11:05 AM', '09:25 AM', '2026-05-26', '16h 20m', 430.00),
+    ('FDA-602', 'Sydney (SYD)', 'Banff, Canada', '06:35 PM', '04:50 PM', '2026-05-26', '16h 15m', 585.00),
+    ('FDA-701', 'Sydney (SYD)', 'London (LHR)', '03:30 PM', '05:55 AM', '2026-05-21', '23h 25m', 980.00),
+    ('FDA-702', 'Sydney (SYD)', 'New York (JFK)', '01:05 PM', '05:10 PM', '2026-05-23', '22h 05m', 1190.00),
+]
+
+@app.on_event("startup")
+def seed_demo_flights():
+    """Keep the demo destinations bookable even on an existing local database."""
+    try:
+        conn = psycopg2.connect(**DB_CONFIG)
+        cursor = conn.cursor()
+        for flight in DEMO_FLIGHTS:
+            cursor.execute("SELECT id FROM flights WHERE flight_number = %s", (flight[0],))
+            if cursor.fetchone():
+                continue
+            cursor.execute(
+                """
+                INSERT INTO flights (flight_number, departure_city, arrival_city, departure_time, arrival_time, departure_date, duration, price)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                """,
+                flight
+            )
+        conn.commit()
+    except Exception as exc:
+        print(f"Demo flight seed skipped: {exc}")
+    finally:
+        try:
+            conn.close()
+        except Exception:
+            pass
+
+
 # ===========================
 # AUTH ROUTES
 # ===========================
@@ -260,6 +305,29 @@ def search_flights(
 
     cursor.execute(query, params)
     flights = cursor.fetchall()
+
+    # Demo-friendly fallback: the homepage destination cards may only pass an
+    # arrival city and the user's selected/current date. If that exact date has
+    # no records, show matching routes for that destination instead of an empty page.
+    if not flights and arrival_city and date:
+        fallback_query = "SELECT * FROM flights WHERE LOWER(arrival_city) LIKE %s"
+        fallback_params = [f"%{arrival_city.lower()}%"]
+        if departure_city:
+            fallback_query += " AND LOWER(departure_city) LIKE %s"
+            fallback_params.append(f"%{departure_city.lower()}%")
+        fallback_query += " ORDER BY price ASC"
+        cursor.execute(fallback_query, fallback_params)
+        flights = cursor.fetchall()
+
+    # If a destination card is clicked without a departure city, keep the demo
+    # usable by searching any route into that destination.
+    if not flights and arrival_city:
+        cursor.execute(
+            "SELECT * FROM flights WHERE LOWER(arrival_city) LIKE %s ORDER BY price ASC",
+            (f"%{arrival_city.lower()}%",)
+        )
+        flights = cursor.fetchall()
+
     return [dict(f) for f in flights]
 
 

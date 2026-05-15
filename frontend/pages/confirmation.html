@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed – FlyDreamAir</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<nav>
+    <a href="index.html" class="nav-logo">FlyDreamAir</a>
+    <ul class="nav-links">
+        <li><a href="index.html">Book</a></li>
+        <li><a href="manage.html" class="active">Manage</a></li>
+        <li><a href="shop.html">Shop</a></li>
+    </ul>
+    <span class="nav-icon" id="nav-user-icon" onclick="window.location.href='manage.html#settings'">👤</span>
+</nav>
+
+<div style="padding:0 22px;">
+    <div class="confirm-card">
+        <div class="confirm-hero">
+            <div class="booking-progress" style="margin:0 0 22px 0;">
+                <div class="progress-step done">1 Flight</div>
+                <div class="progress-step done">2 Seat</div>
+                <div class="progress-step done">3 Extras</div>
+                <div class="progress-step active">4 Confirm</div>
+            </div>
+            <div style="font-size:46px;">✅</div>
+            <h1 style="font-size:34px; margin-top:10px;">Your trip is confirmed</h1>
+            <p style="opacity:.85; margin-top:6px;">Your digital boarding pass and booking summary are ready.</p>
+        </div>
+        <div class="confirm-body">
+            <div id="confirm-message" class="shop-success" style="display:none;">In-flight extras were added to this booking.</div>
+            <div id="confirmation-content">
+                <div class="loading"><div class="spinner"></div><p>Loading boarding pass...</p></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/main.js"></script>
+<script>
+    requireLogin();
+    const params = new URLSearchParams(window.location.search);
+    const bookingId = params.get("booking_id");
+    const extras = params.get("extras");
+    if (extras) document.getElementById("confirm-message").style.display = "block";
+
+    async function loadConfirmation() {
+        const container = document.getElementById("confirmation-content");
+        if (!bookingId) {
+            container.innerHTML = `<div class="alert alert-error">No booking selected. Open a confirmed trip from Manage Trips.</div>`;
+            return;
+        }
+        try {
+            const booking = await apiRequest(`/bookings/${bookingId}`);
+            let services = [];
+            try { services = await apiRequest(`/bookings/${bookingId}/services`); } catch (err) { services = []; }
+            const serviceTotal = services.reduce((sum, s) => sum + Number(s.quantity) * Number(s.unit_price), 0);
+            const meta = flightMeta(booking);
+            container.innerHTML = `
+                <div class="boarding-pass">
+                    <div>
+                        <span class="status-badge">${booking.status.toUpperCase()}</span>
+                        <div class="big-route" style="margin-top:12px;">${booking.departure_city} → ${booking.arrival_city}</div>
+                        <p class="muted" style="margin-top:6px;">${booking.flight_number} • ${formatDate(booking.departure_date)}</p>
+                        <div class="trip-extra-grid">
+                            <div class="trip-extra"><span class="muted">Departure</span><b>${booking.departure_time}</b></div>
+                            <div class="trip-extra"><span class="muted">Arrival</span><b>${booking.arrival_time}</b></div>
+                            <div class="trip-extra"><span class="muted">Seat</span><b>${booking.seat_number || "Not selected"}</b></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="border-radius:14px; overflow:hidden; margin-bottom:14px;">
+                            <img src="${getDestinationImage(booking.arrival_city)}" alt="${booking.arrival_city}" style="width:100%; height:150px; object-fit:cover; display:block;">
+                        </div>
+                        <div class="trip-extra"><span class="muted">Confirmation</span><b>${booking.confirmation_code}</b></div>
+                        <div class="trip-extra" style="margin-top:10px;"><span class="muted">Aircraft / Gate</span><b>${meta.aircraft}<br>${meta.gate}</b></div>
+                    </div>
+                </div>
+
+                <div style="margin-top:22px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                    <div class="sidebar-card" style="margin:0;">
+                        <h3>Trip Total</h3>
+                        <div class="summary-row"><span class="summary-label">Booking total</span><span>${money(booking.total_price)}</span></div>
+                        <div class="summary-row"><span class="summary-label">Extras included</span><span>${money(serviceTotal)}</span></div>
+                        <div class="summary-row total"><span>Status</span><span>${booking.status}</span></div>
+                    </div>
+                    <div class="sidebar-card" style="margin:0;">
+                        <h3>Added Services</h3>
+                        ${services.length ? services.map(s => `<div class="summary-row"><span>${s.service_name} × ${s.quantity}</span><span>${money(Number(s.quantity)*Number(s.unit_price))}</span></div>`).join("") : `<p class="muted">No extras added yet.</p>`}
+                    </div>
+                </div>
+
+                <div class="confirmation-actions">
+                    <a class="btn btn-primary" href="manage.html#trips">Manage Trip</a>
+                    <a class="btn btn-outline" href="shop.html?booking_id=${booking.id}">Add More Extras</a>
+                    <a class="btn btn-gold" href="index.html">Book Another Flight</a>
+                </div>
+            `;
+        } catch (err) {
+            container.innerHTML = `<div class="alert alert-error">Could not load confirmation: ${err.message}</div>`;
+        }
+    }
+    loadConfirmation();
+</script>
+</body>
+</html>
