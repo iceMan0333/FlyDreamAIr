@@ -1,8 +1,8 @@
 # FlyDreamAir
 
-FlyDreamAir is a browser-based airline booking system built with HTML, CSS, and JavaScript. The current version runs as a static frontend from `index.html` and uses browser storage to keep booking details available across the booking flow.
+FlyDreamAir is an HTML, CSS and JavaScript based web-based airline booking system. The current version is a static frontend that loads from `index.html` and stores booking data in the browser, so it can be accessed throughout the booking process.
 
-The application covers the main steps of a flight booking experience, from searching destinations to selecting flights, confirming passenger details, choosing seats and onboard services, completing payment, and viewing a receipt.
+The application includes the most significant aspects of a flight booking process, including searching destinations, selecting flights, confirming passenger information, choosing seats and on-board services, making payment and viewing a receipt.
 
 ## Features
 
