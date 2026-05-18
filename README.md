@@ -1,49 +1,39 @@
 # FlyDreamAir
 
-FlyDreamAir is a student airline booking prototype created for the T17 project submission. The final submitted version is a static HTML, CSS, and JavaScript demo that runs from `index.html` and stores demo booking data in browser storage.
+FlyDreamAir is a browser-based airline booking system built with HTML, CSS, and JavaScript. The current version runs as a static frontend from `index.html` and uses browser storage to keep booking details available across the booking flow.
 
-The project originally planned to use a FastAPI backend with PostgreSQL. That backend work was built during the middle of the project, but the final report explains that the team re-baselined the submission to a simpler static frontend because of late integration risk and resource constraints.
+The application covers the main steps of a flight booking experience, from searching destinations to selecting flights, confirming passenger details, choosing seats and onboard services, completing payment, and viewing a receipt.
 
-## Final Demo
+## Features
 
-Open `index.html` in a browser to start the demo from the homepage.
+- Homepage with destination search and trending destinations
+- Flight selection page with generated flight options
+- Passenger confirmation page
+- Seat selection and onboard services pages
+- Card payment and booking receipt flow
+- Sign up, login, profile, and manage booking pages
+- Browser-based demo state using `sessionStorage` and `localStorage`
 
-Main final-version features:
+## Running the Project
 
-- homepage with destination search and trending destinations
-- flight selection flow
-- passenger confirmation
-- seat selection and onboard services
-- card payment summary and receipt
-- sign up, login, profile, and manage booking demo pages
-- local `sessionStorage` and `localStorage` for demo state
+Open `index.html` in a browser to start from the homepage.
 
-No server, database, API key, or package installation is required for the final submitted version.
+The current version does not require a server, database, API key, package installation, or backend deployment.
 
-## Project History
-
-This repository was reconstructed from archived project snapshots so the Git history shows the development story described in the final report and weekly reports.
+## Version History
 
 | Tag | Stage | Summary |
 | --- | --- | --- |
-| `v0.1-ui-prototype` | 01 early frontend | First simple HTML/JS booking pages and navigation prototype. |
-| `v0.2-frontend-expanded` | 02 expanded frontend | Expanded static frontend flow using browser storage for demo data. |
-| `v0.3-backend-postgres` | 03 backend postgres | PostgreSQL schema and FastAPI backend prototype for users, flights, bookings, seats, and services. |
-| `v0.4-integration-attempt` | 04 integration attempt | Frontend and backend integration attempt with API-connected booking flow. |
-| `v1.0-final-submission` | 05 final version | Final simplified static submission with backend work archived. |
+| `v0.1-ui-prototype` | 01 early frontend | Built the first booking pages and navigation prototype. |
+| `v0.2-frontend-expanded` | 02 expanded frontend | Expanded the frontend flow and added browser storage for demo booking data. |
+| `v0.3-backend-postgres` | 03 backend postgres | Added PostgreSQL schema work and a FastAPI backend prototype for users, flights, bookings, seats, and services. |
+| `v0.4-integration-attempt` | 04 integration attempt | Connected the frontend booking flow with backend API work during integration. |
+| `v1.0-final-submission` | 05 final version | Finalized the simplified static version and kept earlier backend work archived. |
 
-The weekly report shows that database development started in week 4, beginning around 23 April. The reconstructed commits use dates based on that project timeline.
+Database development began around 23 April, followed by API development, integration work, and final frontend simplification.
 
 ## Backend Archive
 
-The non-final FastAPI and PostgreSQL work is kept in `archive/backend-postgres-prototype/`.
+Earlier FastAPI and PostgreSQL work is kept in `archive/backend-postgres-prototype/`.
 
-That folder is included for assessment evidence only. It is not required to run the final demo.
-
-## Running the Final Version
-
-1. Open `index.html`.
-2. Use the homepage search or destination cards to begin the booking flow.
-3. Continue through flight selection, confirmation, seat/services, payment, and receipt pages.
-
-Because the final version is static, refreshing or clearing browser storage may reset demo booking information.
+That archive is included to preserve the backend development stage, but it is not needed to run the current static version.
