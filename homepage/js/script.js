@@ -1,21 +1,21 @@
 document.getElementById('our-destinations').addEventListener('click', function() {
-    window.location.href = '../destinations/html/destination.html';
+    window.location.href = 'destinations/html/destination.html';
 });
 
 document.getElementById('help-link').addEventListener('click', function() {
-    window.location.href = '../../help/html/help.html';
+    window.location.href = 'help/html/help.html';
 });
 
 document.getElementById('mb').addEventListener('click', function() {
-    window.location.href = '../../manageBooking/html/mb.html';
+    window.location.href = 'manageBooking/html/mb.html';
 });
 
 document.getElementById('sign-up').addEventListener('click', function() {
-    window.location.href = '../../signup/html/signup.html';
+    window.location.href = 'signup/html/signup.html';
 });
 
 document.getElementById('sign-in').addEventListener('click', function() {
-    window.location.href = '../../login/html/login.html';
+    window.location.href = 'login/html/login.html';
 });
 
 // JS for handling round trip and one way functionality
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }));
 
         // Prepare the URL for the selection page
-        let url = `../../selectFlight/html/selection.html?from=${encodeURIComponent(fromCity)}&to=${encodeURIComponent(toCity)}&departDate=${encodeURIComponent(departDate)}&adults=${encodeURIComponent(adults)}&children=${encodeURIComponent(children)}&infants=${encodeURIComponent(infants)}&tripType=${encodeURIComponent(tripType)}`;
+        let url = `selectFlight/html/selection.html?from=${encodeURIComponent(fromCity)}&to=${encodeURIComponent(toCity)}&departDate=${encodeURIComponent(departDate)}&adults=${encodeURIComponent(adults)}&children=${encodeURIComponent(children)}&infants=${encodeURIComponent(infants)}&tripType=${encodeURIComponent(tripType)}`;
 
         // Add return date to the URL only if it's a round-trip
         if (tripType === 'round-trip' && returnDate) {
