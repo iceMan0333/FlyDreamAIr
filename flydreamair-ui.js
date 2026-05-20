@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const currentUser = JSON.parse(localStorage.getItem('flydreamairCurrentUser') || 'null');
+    const loginHref = getRelativePageHref('login/html/login.html');
+    const profileHref = getRelativePageHref('profile/html/profile.html');
 
     // Make the navigation look consistent on every page.
     // Older pages had slightly different nav markup, so this adds one profile icon.
@@ -27,19 +29,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const icon = document.createElement('a');
         icon.className = 'profile-icon-link';
-        icon.href = currentUser ? getRelativeProfileHref() : getRelativeLoginHref();
+        icon.href = currentUser ? profileHref : loginHref;
         icon.setAttribute('aria-label', currentUser ? 'Open profile' : 'Sign in');
         icon.innerHTML = '<i class="fas fa-user-circle" aria-hidden="true"></i>';
         nav.appendChild(icon);
     });
 });
 
-// Choose the correct login link for root pages and nested pages.
-function getRelativeLoginHref() {
-    return window.location.pathname.includes('/html/') ? '../../login/html/login.html' : 'login/html/login.html';
-}
-
-// Choose the correct profile link for root pages and nested pages.
-function getRelativeProfileHref() {
-    return window.location.pathname.includes('/html/') ? '../../profile/html/profile.html' : 'profile/html/profile.html';
+function getRelativePageHref(rootPagePath) {
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
+    const isNestedHtmlPage = pathParts.length >= 2 && pathParts[pathParts.length - 2] === 'html';
+    return isNestedHtmlPage ? `../../${rootPagePath}` : rootPagePath;
 }
