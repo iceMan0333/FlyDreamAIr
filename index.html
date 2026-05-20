@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlyDreamAir</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Livvic:ital,wght@1,900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM Sans:wght@500;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gilroy:wght@700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Larsseit:wght@400;500&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="homepage/css/layout.css">
+    <!-- Original CSS -->
+    <link rel="stylesheet" href="homepage/css/header.css">
+    <!-- Booking Form CSS -->
+    <link rel="stylesheet" href="homepage/css/booking.css">
+    <!-- Trending CSS-->
+     <link rel="stylesheet" href="homepage/css/trending.css">
+    <!-- Foother CSS-->
+     <link rel="stylesheet" href="homepage/css/footer.css">
+     <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="flydreamair-ui.css">
+    <script src="flydreamair-ui.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="flydreamair-parent">
+            <!-- Logo  -->
+            <div class="flydreamair-logo header-logo">
+                <span class="fly">Fly</span><br>
+                <span class="dreamair">DreamAir</span>
+            </div>
+
+            <!-- Navigation Menu aligned to the right -->
+            <div class="deals-parent">
+                <a class="deals" id="home-link" href="index.html">Home</a>
+                <a class="deals" id="help-link" href="help/html/help.html">Help</a>
+                <a class="deals" id="sign-in" href="login/html/login.html">Sign In</a>
+                <div class="sign-up-wrapper">
+                    <a class="deals sign-up" id="sign-up" href="signup/html/signup.html">Sign Up</a>
+                </div>
+                <a class="deals manage-booking" id="mb" href="manageBooking/html/mb.html">Manage Booking</a>
+            </div>
+        </div>
+    </header>
+        
+        <!-- Image Section -->
+        <div class="image-section">
+            <img src="homepage/images/hero-plane-clouds.jpg" alt="FlyDreamAir airplane hero image" class="image-1-icon">
+            <div class="text-overlay">
+                <div class="discover-your-next-container">
+                  <p class="discover-line-1">The Sky is</p>
+                  <p class="discover-line-2">Not The Limit</p>
+                </div>
+            </div>
+            
+            <!-- Booking Form Section -->
+            <div class="booking-section" id="booking">
+                <div class="booking-box">
+                    <div class="section-title">Book Your Flight</div>
+                    
+                    <!-- Trip Selection (Round Trip/One Way) -->
+                    <div class="trip-selection">
+                        <label>
+                            <input type="radio" name="trip" value="round-trip" checked>
+                            <span class="radio-label">Round Trip</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="trip" value="one-way">
+                            <span class="radio-label">One Way</span>
+                        </label>
+                    </div>
+
+                    <!-- City Selection & Date Selection in one line -->
+                    <div class="input-row">
+                        <div class="input-wrapper">
+                            <label for="from">From</label>
+                            <input type="text" id="from" class="city-input" placeholder="Airport or Cities">
+                            <ul id="from-suggestions" class="suggestions-list"></ul> <!-- Suggestions for "From" -->
+                        </div>
+                        
+                        <div class="input-wrapper">
+                            <label for="to">To</label>
+                            <input type="text" id="to" class="city-input" placeholder="Airport or Cities">
+                            <ul id="to-suggestions" class="suggestions-list"></ul> <!-- Suggestions for "To" -->
+                        </div>                        
+
+                        <div class="input-wrapper">
+                            <label for="depart-date" style="display: block;">Depart When?</label>
+                            <input type="date" id="depart-date" class="date-input">
+                        </div>
+                        <div class="input-wrapper" id="return-date">
+                            <label for="return-date-input" style="display: block;">Return When?</label>
+                            <input type="date" id="return-date-input" class="date-input">
+                        </div>
+                    </div>
+
+                    <!-- Search Button -->
+                    <div class="search-button">
+                        <button>Search Flights →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trending Destination Section -->
+        <div class="trending-section">
+            <div class="trending-heading-row">
+                <div>
+                    <h2>Trending <span class="highlight">Horizons</span></h2>
+                    <p class="trending-copy">Our curated selection of destinations currently capturing the hearts of global travelers. Explore the extraordinary.</p>
+                </div>
+                <a class="view-destinations-link" href="destinations/html/destination.html">View All Destinations →</a>
+            </div>
+
+            <div class="carousel-container">
+                <div class="carousel-slide destination-showcase">
+                    <div class="carousel-item featured-destination" data-destination="Paris">
+                        <img src="homepage/images/paris.jpg" alt="Paris">
+                        <div class="destination-card-content">
+                            <span class="destination-badge">Featured</span>
+                            <div class="city-name">Paris, France</div>
+                            <p>Experience timeless boulevards, galleries, and skyline views.</p>
+                            <div class="destination-actions">
+                                <button type="button">Book Now</button>
+                                <span>From $849</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item" data-destination="Tokyo">
+                        <img src="destinations/images/tokyo.webp" alt="Tokyo">
+                        <div class="destination-card-content">
+                            <div class="city-name">Tokyo, Japan</div>
+                            <p>The collision of tradition and futurism.</p>
+                            <span class="destination-price">From $1,120</span>
+                        </div>
+                    </div>
+                    <div class="carousel-item" data-destination="Reykjavik">
+                        <img src="homepage/images/london.png" alt="Reykjavik">
+                        <div class="destination-card-content">
+                            <div class="city-name">Reykjavik, Iceland</div>
+                            <p>Chasing the northern lights.</p>
+                            <span class="destination-price">From $645</span>
+                        </div>
+                    </div>
+                    <div class="carousel-item" data-destination="Banff">
+                        <img src="homepage/images/sydney.jpg" alt="Banff">
+                        <div class="destination-card-content">
+                            <div class="city-name">Banff, Canada</div>
+                            <p>Pristine nature and turquoise lakes.</p>
+                            <span class="destination-price">From $430</span>
+                        </div>
+                    </div>
+                    <div class="carousel-item" data-destination="Dubai">
+                        <img src="homepage/images/dubai.png" alt="Dubai">
+                        <div class="destination-card-content">
+                            <div class="city-name">Dubai, UAE</div>
+                            <p>Skyline luxury, desert sunsets, and world-class shopping.</p>
+                            <span class="destination-price">From $780</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Footer Section-->
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="flydreamair-logo footer-logo">
+                        <span class="fly">Fly</span>
+                        <span class="dreamair">DreamAir</span>
+                    </div>
+                </div>                
+                <div class="footer-sections">
+                    <div class="footer-section">
+                        <b class="section-title">Product</b>
+                        <ul class="section-list">
+                            <li>About</li>
+                            <li>Career</li>
+                            <li>Blog</li>
+                            <li>Special Offers</li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <b class="section-title">Help</b>
+                        <ul class="section-list">
+                            <li>FAQ</li>
+                            <li>Help Center</li>
+                            <li>Privacy Policy</li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <b class="section-title">Partner</b>
+                        <ul class="section-list">
+                            <li>Partner Hub</li>
+                            <li>Affiliates</li>
+                            <li>Advertise</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="subscribe-section">
+                    <b class="subscribe-title">Subscribe</b>
+                    <div class="subscription-box">
+                        <input type="email" placeholder="Email address" class="subscribe-input">
+                        <button class="subscribe-btn">→</button>
+                    </div>
+                    <p class="subscribe-info"></p>
+                </div>
+                <!-- Social Icons using Font Awesome -->
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-x"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-terms">
+                <span>Terms</span>
+                <span>Privacy</span>
+                <span>Cookies</span>
+            </div>
+        </div>
+    <!-- Script -->
+    <script src="homepage/js/script.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const currentUser = JSON.parse(localStorage.getItem('flydreamairCurrentUser') || 'null');
+    const signIn = document.getElementById('sign-in');
+    const signUp = document.getElementById('sign-up');
+    if (currentUser && signIn) {
+        signIn.textContent = 'Profile';
+        signIn.href = signIn.getAttribute('href').replace('login/html/login.html', 'profile/html/profile.html');
+        signIn.title = 'View your profile';
+    }
+    if (currentUser && signUp) signUp.style.display = 'none';
+});
+</script>
+
+</body>
+</html>

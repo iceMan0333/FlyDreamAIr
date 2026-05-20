@@ -1,0 +1,160 @@
+.deals i {
+    margin-right: 8px; 
+}
+body {
+    background: linear-gradient(to bottom right, #f4f4f4, #e8e8e8);
+    font-family: 'DM Sans', sans-serif;
+}
+
+/* Center the Manage Booking section */
+.manage-booking-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Main heading style */
+.manage-booking-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 36px;
+    color: #283841;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Subtitle style */
+.manage-booking-subtitle {
+    font-size: 18px;
+    color: #6c757d;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Input fields with 3D effect */
+.booking-input {
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.booking-input:focus {
+    border-color: #e8b749;
+    box-shadow: 0 0 8px rgba(232, 183, 73, 0.5);
+}
+
+/* Icon alignment for the input fields */
+.input-container {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-100%);
+    color: #6c757d;
+    font-size: 18px;
+    pointer-events: none; 
+}
+.booking-input {
+    padding-left: 40px; 
+}
+
+/* Button styles */
+.continue-button, .signup-button {
+    width: 100%;
+    padding: 15px;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.continue-button {
+    background-color: #e8b749;
+    color: #ffffff;
+    border: none;
+}
+
+.signup-button {
+    background-color: #283841;
+    color: #ffffff;
+    border: none;
+    margin-top: 10px;
+}
+
+/* Hover effect for buttons */
+.continue-button:hover, .signup-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Or text style */
+.or-text {
+    display: block;
+    text-align: center;
+    margin: 15px 0;
+    color: #6c757d;
+    font-size: 14px;
+}
+
+/* Add spacing to footer */
+footer {
+    margin-top: 50px;
+}
+
+/* Adjust Help icon style */
+.deals-parent .deals i {
+    margin-right: 5px;
+    color: #283841;
+}
+.bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    width: 100%;
+    margin-top: 24px;
+}
+
+.booking-card {
+    text-align: left;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.booking-card h2 {
+    margin: 0 0 14px;
+    color: #09244b;
+}
+
+.booking-card p {
+    margin: 8px 0;
+    color: #333;
+}
+
+.booking-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+
+.booking-actions .continue-button,
+.booking-actions .signup-button {
+    width: auto;
+    min-width: 150px;
+    padding: 12px 18px;
+}
+

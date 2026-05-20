@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enjoy Your Flight - FlyDreamAir</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Livvic:ital,wght@1,900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM Sans:wght@500;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gilroy:wght@700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Larsseit:wght@400;500&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/receipt.css">
+    <link rel="stylesheet" href="../../theme.css">
+    <link rel="stylesheet" href="../../flydreamair-ui.css">
+    <script src="../../flydreamair-ui.js" defer></script>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="flydreamair-parent">
+            <div class="flydreamair-logo header-logo">
+                <span class="fly">Fly</span><br>
+                <span class="dreamair">DreamAir</span>
+            </div>
+            <div class="deals-parent">
+                <a class="deals" id="home-link" href="../../index.html">Home</a>
+                <a class="deals" id="help-link" href="../../help/html/help.html">Help</a>
+                <a class="deals" id="sign-in" href="../../login/html/login.html">Sign In</a>
+                <div class="sign-up-wrapper">
+                    <a class="deals sign-up" id="sign-up" href="../../signup/html/signup.html">Sign Up</a>
+                </div>
+                <a class="deals manage-booking" id="mb" href="../../manageBooking/html/mb.html">Manage Booking</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Payment Successful Section -->
+    <div class="payment-success-container">
+        <h1>Payment Successful!</h1>
+        <p>Thank you for booking with FlyDreamAir. Below is your flight ticket and receipt.</p>
+        <div class="ticket-receipt-container">
+            <div class="ticket">
+                <h2>Flight Ticket</h2>
+                <div class="ticket-details">
+                    <p><strong>Flight:</strong> Sydney (SYD) ➔ Melbourne (MEL)</p>
+                    <p><strong>Date:</strong> 25th September 2024</p>
+                    <p><strong>Departure Time:</strong> 08:15 AM</p>
+                    <p><strong>Class:</strong> Economy</p>
+                    <p><strong>Passenger Name:</strong> John Doe</p>
+                    <p><strong>Seat Number:</strong> 12A</p>
+                    <p><strong>Booking Reference:</strong> ABCEF01</p>
+                </div>
+            </div>
+
+            <div class="receipt">
+                <h2>Receipt</h2>
+                <div class="receipt-details">
+                    <p><strong>Flight Fare:</strong> $230</p>
+                    <p><strong>Taxes & Fees:</strong> $50</p>
+                    <p><strong>Food & Drinks:</strong> $20</p>
+                    <p><strong>Total Paid:</strong> $300</p>
+                    <p><strong>Payment Method:</strong> Credit Card</p>
+                    <p><strong>Transaction ID:</strong> TXN987654321</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Download and Back Buttons -->
+        <div class="download-buttons">
+            <!-- Assuming this is within your receipt or ticket display section -->
+            <button id="download-ticket" class="download-button">Download Ticket</button>
+            <button id="download-receipt" class="download-button">Download Receipt</button>
+
+        </div>
+
+        <!-- Back to Main Menu Button -->
+        <div class="back-button-container">
+            <a href="../../index.html" class="back-main-menu-btn">Back to Main Menu</a>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="flydreamair-logo footer-logo">
+                        <span class="fly">Fly</span>
+                        <span class="dreamair">DreamAir</span>
+                    </div>
+                </div>                
+                <div class="footer-sections">
+                    <div class="footer-section">
+                        <b class="section-title">Product</b>
+                        <ul class="section-list">
+                            <li>About</li>
+                            <li>Career</li>
+                            <li>Blog</li>
+                            <li>Special Offers</li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <b class="section-title">Help</b>
+                        <ul class="section-list">
+                            <li>FAQ</li>
+                            <li>Help Center</li>
+                            <li>Privacy Policy</li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <b class="section-title">Partner</b>
+                        <ul class="section-list">
+                            <li>Partner Hub</li>
+                            <li>Affiliates</li>
+                            <li>Advertise</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="subscribe-section">
+                    <b class="subscribe-title">Subscribe</b>
+                    <div class="subscription-box">
+                        <input type="email" placeholder="Email address" class="subscribe-input">
+                        <button class="subscribe-btn">→</button>
+                    </div>
+                </div>
+                <div class="social-icons">
+                    <a href="#" class="social-icon"><i class="fab fa-x"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-terms">
+                <span>Terms</span>
+                <span>Privacy</span>
+                <span>Cookies</span>
+            </div>
+        </div>
+    </footer>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="../js/receipt.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const currentUser = JSON.parse(localStorage.getItem('flydreamairCurrentUser') || 'null');
+    const signIn = document.getElementById('sign-in');
+    const signUp = document.getElementById('sign-up');
+    if (currentUser && signIn) {
+        signIn.textContent = 'Profile';
+        signIn.href = signIn.getAttribute('href').replace('login/html/login.html', 'profile/html/profile.html');
+        signIn.title = 'View your profile';
+    }
+    if (currentUser && signUp) signUp.style.display = 'none';
+});
+</script>
+
+</body>
+</html>

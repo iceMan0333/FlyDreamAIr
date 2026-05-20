@@ -1,0 +1,139 @@
+/* General Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+    margin: 0;
+}
+
+/* Container Styles */
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    background: white;
+    border-radius: 20px;
+    border: 2px solid #5882C1;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    backdrop-filter: blur(18px);
+}
+
+.flydreamair-title {
+    font-size: 24px;
+    font-family: 'Livvic', sans-serif;
+    font-weight: 900;
+    text-align: center;
+    color: #333;
+}
+
+.login-title {
+    font-size: 24px;
+    font-family: 'Livvic', sans-serif;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+}
+
+#login-form {
+    width: 100%;
+}
+
+/* Input Fields */
+.input-container {
+    width: 100%;
+    position: relative;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.input-field {
+    width: 100%;
+    max-width: 350px;
+    padding: 12px 15px 12px 45px;
+    background: #F2F3F4;
+    border-radius: 5px;
+    border: 1px solid #BCBEC0;
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* Input Icon */
+.input-icon {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #b0b0b0;
+}
+
+/* Forgot Password */
+.forgot-password-container {
+    text-align: right;
+    margin-top: 4px;
+    width: 100%;
+}
+
+.forgot-password {
+    font-size: 12px;
+    color: #5882C1;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Sign in Button */
+.signin-button {
+    width: 100%;
+    max-width: 350px;
+    padding: 12px;
+    background: #000;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-transform: uppercase;
+}
+
+.signin-button:hover {
+    background: #333;
+}
+
+/* Registration Prompt */
+.registration-prompt {
+    font-size: 12px;
+    color: #333;
+    text-align: center;
+}
+
+.register-link {
+    color: #e8b749;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+

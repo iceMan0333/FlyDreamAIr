@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlyDreamAir Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../../theme.css">
+    <link rel="stylesheet" href="../../flydreamair-ui.css">
+</head>
+<body>
+    <div class="container">
+        <div class="flydreamair-title">FlyDreamAir</div>
+        <div class="login-title">Login</div>
+
+        <form id="login-form">
+            <div class="input-container">
+                <i class="fas fa-envelope input-icon"></i>
+                <input type="email" class="input-field" id="email" placeholder="username@gmail.com" required>
+            </div>
+
+            <div class="input-container">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" class="input-field" id="password" placeholder="Password" required>
+                <div class="forgot-password-container">
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+            </div>
+
+            <button type="submit" class="signin-button" id="signinBtn">Sign In</button>
+        </form>
+
+        <div class="registration-prompt">
+            <span>Don't have an account yet? </span>
+            <a href="../../signup/html/signup.html" class="register-link">Register for free</a>
+        </div>
+    </div>
+
+    <script src="../js/login.js"></script>
+</body>
+</html>
