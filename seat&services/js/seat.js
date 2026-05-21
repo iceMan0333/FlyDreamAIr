@@ -154,16 +154,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set up the onboard services counters.
     const servicePrices = {
         'chocolate-bars-qty': 6,
-        'crackers-qty': 8,
+        'chips-qty': 8,
         'cookies-qty': 5,
-        'noodles-qty': 16,
+        'rice-bowl-qty': 16,
         'sandwiches-qty': 14,
         'pasta-qty': 18,
         'salads-qty': 12,
-        'coffee-tea-qty': 4,
-        'soft-drinks-qty': 5,
+        'coffee-qty': 4,
+        'tea-qty': 4,
         'water-qty': 3,
-        'juices-qty': 5
+        'orange-juice-qty': 5
     };
 
     // Add the visible price under each item name.
@@ -230,9 +230,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize onboard services counters.
     const services = [
-        'chocolate-bars-qty', 'crackers-qty', 'cookies-qty', 'noodles-qty',
-        'sandwiches-qty', 'pasta-qty', 'salads-qty', 'coffee-tea-qty',
-        'soft-drinks-qty', 'water-qty', 'juices-qty'
+        'chocolate-bars-qty', 'chips-qty', 'cookies-qty', 'rice-bowl-qty',
+        'sandwiches-qty', 'pasta-qty', 'salads-qty', 'coffee-qty',
+        'tea-qty', 'water-qty', 'orange-juice-qty'
     ];
 
     const serviceHandlers = services.map(serviceId => handleCounter(serviceId));
