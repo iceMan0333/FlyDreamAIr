@@ -68,7 +68,7 @@ body {
 .input-icon {
     position: absolute;
     left: 10px;
-    color: #b0b0b0; /* Light grey color for the icon */
+    color: #b0b0b0;
     font-size: 18px;
 }
 
@@ -173,3 +173,4 @@ body {
         padding: 20px;
     }
 }
+

@@ -7,7 +7,7 @@ h2 {
     font-family: 'Arial', sans-serif;
     font-weight: bold;
     color: #283841;
-    margin-bottom: 20px; /* Adjust the value to increase/decrease the space */
+    margin-bottom: 20px; 
 }
 
 .main-content {
@@ -37,7 +37,7 @@ h2 {
 .seat {
     width: 40px;
     height: 40px;
-    background-color: #283841; /* Default seat color */
+    background-color: #283841; 
     border-radius: 8px;
     border: none;
     font-size: 14px;
@@ -47,16 +47,16 @@ h2 {
 }
 
 .seat.available:hover {
-    background-color: #4a5e6d; /* Hover effect for available seats */
+    background-color: #4a5e6d; 
 }
 
 .seat.booked {
-    background-color: #6c757d68; /* Booked seat color */
+    background-color: #6c757d68; 
     cursor: not-allowed;
 }
 
 .seat.selected {
-    background-color: #E8B749; /* Selected seat color */
+    background-color: #E8B749; 
 }
 
 .aisle {
@@ -68,7 +68,7 @@ h2 {
 }
 
 .seat-confirmation {
-    margin-top: 20px; /* Add space between selected seat info and confirmation */
+    margin-top: 20px; 
     padding: 15px;
     border-radius: 10px;
     background-color: #f7f7f7;
@@ -83,7 +83,7 @@ h2 {
 }
 
 #confirm-seat-number {
-    color: #E8B749; /* Highlight selected seat */
+    color: #E8B749; 
     font-weight: bold;
 }
 
@@ -107,3 +107,4 @@ h2 {
 .confirm-button:hover:not(:disabled) {
     background-color: #d1a837;
 }
+

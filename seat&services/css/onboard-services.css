@@ -5,7 +5,7 @@ h2 {
 }
 
 .service-section {
-    margin-bottom: 15px;  /* Reduced gap between sections */
+    margin-bottom: 15px;  
 }
 
 h3 {
@@ -19,7 +19,7 @@ h3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;  /* Reduced gap between items */
+    margin-bottom: 10px; 
 }
 
 .service-item span {
@@ -79,3 +79,4 @@ button.decrease:hover {
 .continue-button:hover {
     background-color: #d1a83b;
 }
+

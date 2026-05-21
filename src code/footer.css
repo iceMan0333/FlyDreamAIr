@@ -31,15 +31,14 @@
     font-size: 24px;
     font-weight: 900;
     font-style: italic;
-    color: #e8b749; /* Yellow color for the footer */
+    color: #e8b749;
 }
 
-/* Ensure header text stays on separate lines */
 .footer-logo .fly {
-    margin-bottom: -5px; /* Adjust spacing between Fly and DreamAir */
+    margin-bottom: -5px;
 }
 .dreamair {
-    margin-top: 10px; /* Fine-tune spacing */
+    margin-top: 10px;
 }
 .footer-sections {
     display: flex;
@@ -159,3 +158,4 @@
 .footer-terms span:hover {
     text-decoration: underline;
 }
+

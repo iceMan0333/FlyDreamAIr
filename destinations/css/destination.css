@@ -62,8 +62,7 @@ body {
 .deals-parent {
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Aligns the text and buttons to the right */
-    gap: 20px;
+    justify-content: flex-end; 
 }
 
 .deals {
@@ -202,7 +201,7 @@ body {
     color: #e8b749;
 }
 
-/* Ensure header text stays on separate lines */
+
 .footer-logo .fly {
     margin-bottom: -5px;
 }
@@ -288,7 +287,6 @@ body {
     font-family: 'DM Sans', sans-serif;
 }
 
-/* Social icons using Font Awesome */
 .social-icons {
     display: flex;
     gap: 20px;
@@ -329,3 +327,4 @@ body {
 .footer-terms span:hover {
     text-decoration: underline;
 }
+

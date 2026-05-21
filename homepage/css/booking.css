@@ -1,6 +1,6 @@
 .booking-section {
     position: absolute;
-    top: 75%; /* Adjust this value to move it lower */
+    top: 75%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 950px;
@@ -28,7 +28,7 @@
     color: #283841;
 }
 
-.trip-selection, .city-selection, .passenger-selection {
+.trip-selection, .city-selection {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -36,7 +36,7 @@
     margin-bottom: 20px;
 }
 
-.trip-selection label, .passenger-counter {
+.trip-selection label {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -55,7 +55,6 @@ input[type="radio"] {
     color: #283841;
 }
 
-/* Make "From" and "To" input boxes look the same as date input boxes */
 .city-input, .date-input {
     width: 100%;
     padding: 10px;
@@ -63,7 +62,7 @@ input[type="radio"] {
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: rgba(40, 56, 65, 0.06);
-    color: rgba(0, 0, 0, 0.5); /* Grey placeholder color */
+    color: rgba(0, 0, 0, 0.5); 
     transition: border 0.2s ease;
 }
 
@@ -72,40 +71,8 @@ input[type="radio"] {
     outline: none;
 }
 
-/* Ensure the "From" and "To" placeholders also use grey color */
 .city-input::placeholder, .date-input::placeholder {
-    color: rgba(0, 0, 0, 0.5); /* Same grey placeholder color */
-}
-
-.passenger-counter {
-    display: flex;
-    gap: 10px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #283841;
-}
-
-.passenger-counter button {
-    background-color: #283841;
-    color: #fff;
-    border: none;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.passenger-counter button:hover {
-    background-color: #4a5e6d;
-}
-
-.passenger-counter .minus {
-    background-color: grey;
+    color: rgba(0, 0, 0, 0.5); 
 }
 
 .search-button {
@@ -141,29 +108,29 @@ input[type="radio"] {
 }
 .suggestions-list {
     list-style-type: none;
-    padding: 0;               /* Remove padding */
-    margin: 0;                /* Remove margin */
-    border: none;             /* Remove border */
-    max-height: 100px;        /* Smaller max height */
-    overflow-y: auto;         /* Enable vertical scroll */
-    position: absolute;       /* Position it below the input field */
-    width: 20%;              /* Match input width */
-    background-color: white;  /* Background color */
-    z-index: 999;             /* Ensure it stays above other content */
-    font-size: 12px;          /* Smaller font size */
-    border-radius: 4px;       /* Smooth corners */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    display: none;            /* Hide by default */
+    padding: 0;               
+    margin: 0;               
+    border: none;             
+    max-height: 100px;        
+    overflow-y: auto;         
+    position: absolute;      
+    width: 20%;            
+    background-color: white;  
+    z-index: 999;             
+    font-size: 12px;          
+    border-radius: 4px;       
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+    display: none;           
 }
 
 .suggestions-list li {
-    padding: 5px 8px;         /* Reduce padding */
-    cursor: pointer;          /* Pointer cursor */
-    transition: background-color 0.2s ease-in-out; /* Smooth hover */
+    padding: 5px 8px;         
+    cursor: pointer;        
+    transition: background-color 0.2s ease-in-out; 
 }
 
 .suggestions-list li:hover {
-    background-color: #f0f0f0; /* Background change on hover */
+    background-color: #f0f0f0; 
 }
 
 

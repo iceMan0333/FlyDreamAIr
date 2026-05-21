@@ -54,7 +54,7 @@ a {
 .deals-parent {
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Aligns the text and buttons to the right */
+    justify-content: flex-end; 
     gap: 20px;
 }
 
@@ -106,7 +106,7 @@ a {
 
 /* Credit Card Form */
 .credit-card-container {
-    width: 60%;  /* Reduce width to fit alongside purchase summary */
+    width: 60%;  
     padding: 40px;
     background-color: #ffffff;
     border-radius: 10px;
@@ -234,7 +234,7 @@ button.submit-btn:hover {
     font-weight: 900;
     font-style: italic;
     color: #e8b749;
-    margin-bottom: -5px;  /* Adjust gap between Fly and DreamAir */
+    margin-bottom: -5px; 
 }
 
 .footer-logo .dreamair {
@@ -243,7 +243,7 @@ button.submit-btn:hover {
     font-weight: 900;
     font-style: italic;
     color: #e8b749;
-    margin-top: 10px;  /* Adjust gap between Fly and DreamAir */
+    margin-top: 10px;  
 }
 
 .footer-sections {
@@ -364,3 +364,4 @@ button.submit-btn:hover {
 .footer-terms span:hover {
     text-decoration: underline;
 }
+

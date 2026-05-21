@@ -1,0 +1,14 @@
+# Generated project archive
+FlyDreamAir-project.zip
+project-current.zip
+
+# Reconstructed reference copy kept outside the main project history
+FlyDreamAir_reconstructed_git/
+
+# Local operating system files
+Thumbs.db
+.DS_Store
+
+# Editor folders
+.vscode/
+.idea/

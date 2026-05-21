@@ -1,91 +1,75 @@
-// Get the form element
 const form = document.getElementById('registration-form');
 
-// Listen for form submission
 form.addEventListener('submit', function(event) {
-    // Prevent the default form submission behavior
     event.preventDefault();
 
-    // Get form values
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
+    // Collect and clean up all form values before validation.
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim().toLowerCase();
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
-    const phone = document.getElementById('phone').value;
+    const phone = document.getElementById('phone').value.trim();
     const dob = document.getElementById('dob').value;
     const terms = document.getElementById('terms').checked;
 
-    // Reset previous error/success states
+    // Check the form field-by-field so users know what to fix.
     resetValidation();
-
     let isValid = true;
 
-    // Check if passwords match
-    if (password !== confirmPassword) {
-        showError('confirm-password', 'Passwords do not match.');
-        isValid = false;
+    if (!username) { showError('username', 'Please enter a username.'); isValid = false; }
+    if (!validateEmail(email)) { showError('email', 'Please enter a valid email.'); isValid = false; }
+    if (password.length < 4) { showError('password', 'Password must be at least 4 characters for this demo.'); isValid = false; }
+    if (password !== confirmPassword) { showError('confirm-password', 'Passwords do not match.'); isValid = false; }
+    if (!phone) { showError('phone', 'Please enter a phone number.'); isValid = false; }
+    if (!dob) { showError('dob', 'Please enter your date of birth.'); isValid = false; }
+    if (!terms) { showStatus('You must agree to the terms of services and privacy policy.'); isValid = false; }
+
+    if (!isValid) return;
+
+    // Stop duplicate accounts from being created with the same email address.
+    const users = JSON.parse(localStorage.getItem('flydreamairUsers') || '[]');
+    if (users.some(user => user.email === email)) {
+        showError('email', 'An account already exists with this email. Please log in.');
+        return;
     }
 
-    // Check if terms are agreed
-    if (!terms) {
-        alert('You must agree to the terms of services and privacy policy.');
-        isValid = false;
-    }
+    // Save the user and sign them in straight away for the demo flow.
+    const newUser = { username, email, password, phone, dob, createdAt: new Date().toISOString() };
+    users.push(newUser);
+    localStorage.setItem('flydreamairUsers', JSON.stringify(users));
+    localStorage.setItem('flydreamairCurrentUser', JSON.stringify({ username, email, phone, dob }));
 
-    // If all fields are valid
-    if (isValid) {
-        // Show a success message (can replace this with an actual page navigation later)
-        alert('Registration successful! Navigating to homepage...');
-        window.location.href = '../../index.html';
-    }
+    showStatus('Account created and logged in successfully!');
+    window.location.href = '../../index.html';
 });
 
-// Real-time validation for password matching
-const passwordInput = document.getElementById('password');
-const confirmPasswordInput = document.getElementById('confirm-password');
-
-confirmPasswordInput.addEventListener('input', function() {
-    if (passwordInput.value !== confirmPasswordInput.value) {
-        showError('confirm-password', 'Passwords do not match.');
-    } else {
-        clearError('confirm-password');
-    }
-});
-
-// Helper function to show error message and add visual feedback
+// Show an error beside a specific field.
 function showError(fieldId, message) {
     const inputField = document.getElementById(fieldId);
     inputField.style.borderColor = 'red';
-
-    let errorElem = inputField.nextElementSibling;
-    if (!errorElem || !errorElem.classList.contains('error-message')) {
+    let errorElem = inputField.parentElement.querySelector('.error-message');
+    if (!errorElem) {
         errorElem = document.createElement('span');
         errorElem.classList.add('error-message');
-        inputField.parentNode.appendChild(errorElem);
+        inputField.parentElement.appendChild(errorElem);
     }
     errorElem.textContent = message;
 }
 
-// Helper function to clear error message and reset visual feedback
-function clearError(fieldId) {
-    const inputField = document.getElementById(fieldId);
-    inputField.style.borderColor = '';
-
-    const errorElem = inputField.nextElementSibling;
-    if (errorElem && errorElem.classList.contains('error-message')) {
-        errorElem.remove();
-    }
+// Clear old validation messages before checking the form again.
+function resetValidation() {
+    document.querySelectorAll('.error-message').forEach(error => error.remove());
+    document.querySelectorAll('input').forEach(input => input.style.borderColor = '');
 }
 
-// Helper function to reset all validation styles and messages
-function resetValidation() {
-    const errorMessages = document.querySelectorAll('.error-message');
-    errorMessages.forEach(function(error) {
-        error.remove();
-    });
+// Check that the email looks like a real email address.
+function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).toLowerCase());
+}
 
-    const inputFields = document.querySelectorAll('input');
-    inputFields.forEach(function(input) {
-        input.style.borderColor = '';
-    });
+// Show a message at the top of the sign-up form.
+function showStatus(message) {
+    let box = document.getElementById('form-status');
+    if (!box) { box = document.createElement('div'); box.id = 'form-status'; box.style.cssText = 'margin:12px 0;padding:12px;border-radius:10px;background:#fff7df;color:#5c4300;font-weight:700;text-align:center;'; form.prepend(box); }
+    box.textContent = message;
 }

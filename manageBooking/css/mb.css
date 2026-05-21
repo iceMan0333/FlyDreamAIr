@@ -1,7 +1,6 @@
 .deals i {
-    margin-right: 8px; /* Adjust spacing between icon and text */
+    margin-right: 8px; 
 }
-/* Subtle gradient background for the entire page */
 body {
     background: linear-gradient(to bottom right, #f4f4f4, #e8e8e8);
     font-family: 'DM Sans', sans-serif;
@@ -63,10 +62,10 @@ body {
     transform: translateY(-100%);
     color: #6c757d;
     font-size: 18px;
-    pointer-events: none; /* Ensures the icon doesn't interfere with input focus */
+    pointer-events: none; 
 }
 .booking-input {
-    padding-left: 40px; /* Adjust to accommodate the icon */
+    padding-left: 40px; 
 }
 
 /* Button styles */
@@ -118,3 +117,44 @@ footer {
     margin-right: 5px;
     color: #283841;
 }
+.bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    width: 100%;
+    margin-top: 24px;
+}
+
+.booking-card {
+    text-align: left;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.booking-card h2 {
+    margin: 0 0 14px;
+    color: #09244b;
+}
+
+.booking-card p {
+    margin: 8px 0;
+    color: #333;
+}
+
+.booking-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+
+.booking-actions .continue-button,
+.booking-actions .signup-button {
+    width: auto;
+    min-width: 150px;
+    padding: 12px 18px;
+}
+

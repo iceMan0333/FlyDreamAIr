@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,9 +13,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="../css/header.css">  <!-- Linking css files-->
+    <link rel="stylesheet" href="../css/header.css">  
     <link rel="stylesheet" href="../css/footer.css">
     <link rel="stylesheet" href="../css/mb.css">
+    <link rel="stylesheet" href="../../theme.css">
+    <link rel="stylesheet" href="../../flydreamair-ui.css">
+    <script src="../../flydreamair-ui.js" defer></script>
 </head>
 <body>
     <header>
@@ -24,9 +28,13 @@
                 <span class="dreamair">DreamAir</span>
             </div>
             <div class="deals-parent">
-                <div class="deals">
-                    <i class="fas fa-question-circle"></i> Help
+                <a class="deals" id="home-link" href="../../index.html">Home</a>
+                <a class="deals" id="help-link" href="../../help/html/help.html">Help</a>
+                <a class="deals" id="sign-in" href="../../login/html/login.html">Sign In</a>
+                <div class="sign-up-wrapper">
+                    <a class="deals sign-up" id="sign-up" href="../../signup/html/signup.html">Sign Up</a>
                 </div>
+                <a class="deals manage-booking" id="mb" href="../../manageBooking/html/mb.html">Manage Booking</a>
             </div>
         </div>
     </header>
@@ -40,15 +48,15 @@
             <p class="manage-booking-subtitle">Enter your booking reference, first name, and last name</p>
 
             <div class="input-container">
-                <i class="fas fa-ticket-alt input-icon"></i> <!-- Booking Reference Icon -->
+                <i class="fas fa-ticket-alt input-icon"></i> 
                 <input type="text" placeholder="Booking Reference Number" class="booking-input">
             </div>
             <div class="input-container">
-                <i class="fas fa-user input-icon"></i> <!-- First Name Icon -->
+                <i class="fas fa-user input-icon"></i> 
                 <input type="text" placeholder="First Name" class="booking-input">
             </div>
             <div class="input-container">
-                <i class="fas fa-user input-icon"></i> <!-- Last Name Icon -->
+                <i class="fas fa-user input-icon"></i> 
                 <input type="text" placeholder="Last Name" class="booking-input">
             </div>
             
@@ -122,5 +130,20 @@
     </footer>
 
     <script src="../js/mb.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const currentUser = JSON.parse(localStorage.getItem('flydreamairCurrentUser') || 'null');
+    const signIn = document.getElementById('sign-in');
+    const signUp = document.getElementById('sign-up');
+    if (currentUser && signIn) {
+        signIn.textContent = 'Profile';
+        signIn.href = signIn.getAttribute('href').replace('login/html/login.html', 'profile/html/profile.html');
+        signIn.title = 'View your profile';
+    }
+    if (currentUser && signUp) signUp.style.display = 'none';
+});
+</script>
+
 </body>
 </html>

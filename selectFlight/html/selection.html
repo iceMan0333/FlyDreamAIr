@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,6 +14,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../css/selection.css">
+    <link rel="stylesheet" href="../../theme.css">
+    <link rel="stylesheet" href="../../flydreamair-ui.css">
+    <script src="../../flydreamair-ui.js" defer></script>
 </head>
 <body>
 
@@ -24,14 +28,13 @@
                 <span class="dreamair">DreamAir</span>
             </div>
             <div class="deals-parent">
-                <div class="deals" id="home">Home</div>
-                <div class="deals" id="help-link">Help</div>
-                <div class="deals" id="sign-in">Sign In</div>
-                
-                <!-- Sign Up Button -->
+                <a class="deals" id="home-link" href="../../index.html">Home</a>
+                <a class="deals" id="help-link" href="../../help/html/help.html">Help</a>
+                <a class="deals" id="sign-in" href="../../login/html/login.html">Sign In</a>
                 <div class="sign-up-wrapper">
-                    <div class="deals sign-up" id="sign-up">Sign Up</div>
+                    <a class="deals sign-up" id="sign-up" href="../../signup/html/signup.html">Sign Up</a>
                 </div>
+                <a class="deals manage-booking" id="mb" href="../../manageBooking/html/mb.html">Manage Booking</a>
             </div>
         </div>
     </header>
@@ -72,46 +75,10 @@
 
         <div class="results">
             <div class="sort-section">
-                <span>9 Results</span>
-                <select>
-                    <option value="cheapest">Cheapest Flight</option>
-                    <option value="cheapest">Fastest Flight</option>
-                </select>
+                <span id="results-count">0 Results</span>
             </div>
 
-            <!-- Updated Flight Cards with Larger Size -->
-            <div class="flight-card" data-price="230">
-                <div>
-                    <div class="flight-time">SYD 8:15 AM ➔ MEL 9:50 AM</div>
-                    <div class="flight-time">MEL 4:30 PM ➔ SYD 6:10 AM</div>
-                </div>
-                <div class="flight-price">
-                    <div>$230</div>
-                    <button class="select-btn" id="select">Select</button>
-                </div>
-            </div>
-
-            <div class="flight-card" data-price="245">
-                <div>
-                    <div class="flight-time">SYD 9:00 AM ➔ MEL 10:35 AM</div>
-                    <div class="flight-time">MEL 5:00 PM ➔ SYD 7:00 AM</div>
-                </div>
-                <div class="flight-price">
-                    <div>$245</div>
-                    <button class="select-btn" id="select">Select</button>
-                </div>
-            </div>
-
-            <div class="flight-card" data-price="250">
-                <div>
-                    <div class="flight-time">SYD 10:30 AM ➔ MEL 12:00 PM</div>
-                    <div class="flight-time">MEL 7:30 PM ➔ SYD 9:30 PM</div>
-                </div>
-                <div class="flight-price">
-                    <div>$250</div>
-                    <button class="select-btn" id="select">Select</button>
-                </div>
-            </div>
+            <div id="flight-results"></div>
 
             <button class="show-more-results-btn">Show More Results</button>
         </div>
@@ -177,5 +144,20 @@
     </footer>
 
 <script src="../js/selection.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const currentUser = JSON.parse(localStorage.getItem('flydreamairCurrentUser') || 'null');
+    const signIn = document.getElementById('sign-in');
+    const signUp = document.getElementById('sign-up');
+    if (currentUser && signIn) {
+        signIn.textContent = 'Profile';
+        signIn.href = signIn.getAttribute('href').replace('login/html/login.html', 'profile/html/profile.html');
+        signIn.title = 'View your profile';
+    }
+    if (currentUser && signUp) signUp.style.display = 'none';
+});
+</script>
+
 </body>
 </html>

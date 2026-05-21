@@ -34,22 +34,21 @@ html, body {
     font-size: 24px;
     font-weight: 900;
     font-style: italic;
-    color: #000000; /* Black color for the header */
+    color: #000000;
 }
 .header-logo .fly {
-    margin-bottom: -25px; /* Adjust spacing between Fly and DreamAir */
+    margin-bottom: -25px;
 }
 
-/* Adjust the spacing between "Fly" and "DreamAir" for both */
 .dreamair {
-    margin-top: 0px; /* Fine-tune spacing */
+    margin-top: 0px;
 }
 
 /* Navigation Links aligned to the right */
 .deals-parent {
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Aligns the text and buttons to the right */
+    justify-content: flex-end;
     gap: 20px;
 }
 
@@ -92,7 +91,7 @@ html, body {
     }
 
     .deals-parent {
-        justify-content: flex-start; /* Ensures alignment for smaller screens */
+        justify-content: flex-start;
         flex-wrap: wrap;
         gap: 15px;
     }
@@ -115,7 +114,7 @@ html, body {
 /* Text Overlay */
 .text-overlay {
     position: absolute;
-    top: 35%; /* Adjust for vertical position */
+    top: 35%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: #fff;
@@ -131,9 +130,9 @@ html, body {
     font-family: 'Montserrat', sans-serif;
     color: #fff;
     text-align: center;
-    max-width: 1200px; /* Set to a wider width to prevent text wrapping */
-    margin: 0 auto; /* Center the container */
-    white-space: nowrap; /* Prevent text from wrapping into more lines */
+    max-width: 1200px;
+    margin: 0 auto;
+    white-space: nowrap;
 }
 
 .discover-your-next {
@@ -148,5 +147,6 @@ html, body {
     font-weight: 700;
     margin: 0;
     font-family: 'Montserrat', sans-serif;
-    white-space: nowrap; /* Ensure that text stays on two lines */
+    white-space: nowrap;
 }
+

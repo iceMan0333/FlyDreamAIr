@@ -1,80 +1,83 @@
-document.getElementById('mb').addEventListener('click', function() {
+/*
+  Student project note:
+  This file is part of the FlyDreamAir front-end demo. It has been kept simple and clearly commented so the page logic and layout are easy to follow.
+*/
+
+// Send the Manage Booking button to the manage booking page.
+document.getElementById('mb')?.addEventListener('click', function() {
     window.location.href = '../../manageBooking/html/mb.html';
 });
 
-// Function to retrieve flight data from sessionStorage
+// Get the selected flight details from sessionStorage.
 function getFlightData() {
     const flightData = sessionStorage.getItem('flightData');
     return flightData ? JSON.parse(flightData) : null;
 }
 
-// Function to retrieve passenger name from sessionStorage
+// Get the passenger name saved during confirmation.
 function getPassengerName() {
-    const passengerName = sessionStorage.getItem('passengerName');
-    return passengerName || 'John Doe';  // Default name if not found
+    return sessionStorage.getItem('passengerName') || 'John Doe';
 }
 
-
-// Function to retrieve seat number from sessionStorage
+// Get the selected seat number.
 function getSeatNumber() {
-    return sessionStorage.getItem('seatNumber') || 'N/A';  // Return 'N/A' if no seat number is found
+    return sessionStorage.getItem('seatNumber') || 'N/A';
 }
 
-// Function to retrieve flight fare from sessionStorage
+// Get the selected flight fare.
 function getFlightFare() {
     return sessionStorage.getItem('flightFare') || 'N/A';
 }
 
-// Function to retrieve onboard services total from sessionStorage
+// Get the total for food and drink extras.
 function getOnboardServicesTotal() {
     return sessionStorage.getItem('onboardServicesTotal') || '0';
 }
 
-// Function to display dynamic flight details on the receipt page
+// Display the selected flight and payment details on the receipt page.
 function displayDynamicTicketInfo() {
     const flightDetails = getFlightData();
-    const passengerName = getPassengerName();  // Retrieve the passenger's name
-    const seatNumber = getSeatNumber();  // Retrieve the seat number
-    const flightFare = getFlightFare();  // Retrieve the flight fare
-    const onboardServicesTotal = getOnboardServicesTotal();  // Retrieve the onboard services total
-
-    // Static tax amount (if it's a constant)
-    const taxes = 50;
-    const totalPaid = parseFloat(flightFare) + parseFloat(onboardServicesTotal) + taxes;
+    const passengerName = getPassengerName();
+    const seatNumber = getSeatNumber();
+    const flightFare = getFlightFare();
+    const onboardServicesTotal = getOnboardServicesTotal();
 
     if (!flightDetails) {
-        alert('No flight data found. Please start your booking process again.');
+        console.log('No flight data found. Please start your booking process again.');
         return;
     }
 
-    const flightRoute = `${flightDetails.fromCity} ➔ ${flightDetails.toCity}`;
-    
-    // Update the ticket details with dynamic data
+    // Use a fixed tax amount for the demo receipt.
+    const taxes = 50;
+    const totalPaid = parseFloat(flightFare) + parseFloat(onboardServicesTotal) + taxes;
+    const flightRoute = `${flightDetails.fromCity} to ${flightDetails.toCity}`;
+
+    // Update the ticket details with the saved booking data.
     document.querySelector('.ticket-details').innerHTML = `
         <p><strong>Flight:</strong> ${flightRoute}</p>
-        <p><strong>Date:</strong> ${flightDetails.departDate}</p> <!-- Dynamic departure date -->
+        <p><strong>Date:</strong> ${flightDetails.departDate}</p>
         <p><strong>Class:</strong> Economy</p>
-        <p><strong>Passenger Name:</strong> ${passengerName}</p> <!-- Dynamic passenger name -->
-        <p><strong>Seat Number:</strong> ${seatNumber}</p> <!-- Dynamic seat number -->
-        <p><strong>Booking Reference:</strong> AJF5012464</p>
+        <p><strong>Passenger Name:</strong> ${passengerName}</p>
+        <p><strong>Seat Number:</strong> ${seatNumber}</p>
+        <p><strong>Booking Reference:</strong> ${sessionStorage.getItem('latestBookingReference') || 'AJF5012464'}</p>
     `;
 
-    // Update the receipt details with dynamic flight and onboard services data
+    // Update the receipt details with fare, extras, tax, and total.
     document.querySelector('.receipt-details').innerHTML = `
         <p><strong>Flight Fare:</strong> $${flightFare}</p>
         <p><strong>Taxes & Fees:</strong> $${taxes}</p>
-        <p><strong>Food & Drinks:</strong> $${onboardServicesTotal}</p> <!-- Dynamic onboard services total -->
-        <p><strong>Total Paid:</strong> $${totalPaid.toFixed(2)}</p> <!-- Dynamic total paid -->
+        <p><strong>Food & Drinks:</strong> $${onboardServicesTotal}</p>
+        <p><strong>Total Paid:</strong> $${totalPaid.toFixed(2)}</p>
         <p><strong>Payment Method:</strong> Credit Card</p>
         <p><strong>Transaction ID:</strong> TXN987654321</p>
     `;
-}// Assuming the rest of your functions are correctly set up and working
+}
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize the dynamic ticket information when the page loads
+    // Fill the receipt and ticket when the page loads.
     displayDynamicTicketInfo();
 
-    // Setup event listeners for downloading the receipt and ticket
+    // Set up the download buttons.
     const downloadReceiptBtn = document.getElementById('download-receipt');
     const downloadTicketBtn = document.getElementById('download-ticket');
 
@@ -91,18 +94,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Download the receipt text.
 function downloadReceipt() {
-    const content = document.querySelector('.receipt-details').innerText; // Fetching text from the receipt details displayed on the page
-    const filename = "Receipt.txt"; // Setting a filename
-    downloadFile(content, filename, 'text/plain'); // Calling the download function
+    const content = document.querySelector('.receipt-details').innerText;
+    downloadFile(content, 'Receipt.txt', 'text/plain');
 }
 
+// Download the ticket text.
 function downloadTicket() {
-    const content = document.querySelector('.ticket-details').innerText; // Fetching text from the ticket details displayed on the page
-    const filename = "Ticket.txt"; // Setting a filename
-    downloadFile(content, filename, 'text/plain'); // Calling the download function
+    const content = document.querySelector('.ticket-details').innerText;
+    downloadFile(content, 'Ticket.txt', 'text/plain');
 }
 
+// Create a temporary text file and trigger the download.
 function downloadFile(content, fileName, fileType) {
     const blob = new Blob([content], { type: fileType });
     const url = URL.createObjectURL(blob);

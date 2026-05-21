@@ -1,41 +1,54 @@
-document.getElementById('help-link').addEventListener('click', function() {
+/*
+  Student project note:
+  This file is part of the FlyDreamAir front-end demo. It has been kept simple and clearly commented so the page logic and layout are easy to follow.
+*/
+
+// Header navigation links for this page.
+document.getElementById('help-link')?.addEventListener('click', function() {
     window.location.href = '../../help/html/help.html';
 });
 
-document.getElementById('sign-up').addEventListener('click', function() {
+document.getElementById('sign-up')?.addEventListener('click', function() {
     window.location.href = '../../signup/html/signup.html';
 });
 
-document.getElementById('sign-in').addEventListener('click', function() {
+document.getElementById('sign-in')?.addEventListener('click', function() {
     window.location.href = '../../login/html/login.html';
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Seat selection logic
+
+    // Set up the seat selection area.
     const seatGrid = document.getElementById('seat-grid');
     const confirmSeatNumber = document.getElementById('confirm-seat-number');
     const confirmButton = document.getElementById('confirm-button');
     let selectedSeat = null;
+    let confirmedSeat = null;
+    let isSeatConfirmed = false;
+    sessionStorage.removeItem('seatNumber');
+    sessionStorage.removeItem('seatConfirmed');
 
     const rows = 10;
-    const columns1And3 = ['A', 'B']; // For 1st column (two seats per row)
-    const columns2 = ['D', 'E', 'F']; // For 2nd column (three seats per row)
-    const columns3 = ['H', 'J']; // For 3rd column (two seats per row, different seat labels)
+    const columns1And3 = ['A', 'B'];
+    const columns2 = ['D', 'E', 'F'];
+    const columns3 = ['H', 'J'];
 
-    const bookedSeats = ['1A', '1E', '1J', '2D', '2F', '3A', '3E', '3H', '4B', '4J', '5B','5D', '5H', '6A', '6F', '7B', '7F', '8A', '8H', '9E', '10A', '10D', '10J']; // Example of booked seats
+    // These seats are unavailable in the demo.
+    const bookedSeats = ['1A', '1E', '1J', '2D', '2F', '3A', '3E', '3H', '4B', '4J', '5B','5D', '5H', '6A', '6F', '7B', '7F', '8A', '8H', '9E', '10A', '10D', '10J'];
 
+    // Create one seat button and attach the click behavior for choosing it.
     function createSeat(row, seatLabel) {
         const seatButton = document.createElement('button');
         seatButton.classList.add('seat', 'available');
         seatButton.textContent = `${row}${seatLabel}`;
 
-        // Check if seat is booked
+        // Mark booked seats so they cannot be selected.
         if (bookedSeats.includes(`${row}${seatLabel}`)) {
             seatButton.classList.add('booked');
             seatButton.classList.remove('available');
         }
 
-        // Seat selection logic
+        // Select this seat when the user clicks it.
         seatButton.addEventListener('click', function() {
             if (!seatButton.classList.contains('booked')) {
                 if (selectedSeat) {
@@ -43,10 +56,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 seatButton.classList.add('selected');
                 selectedSeat = seatButton;
+                confirmedSeat = null;
+                isSeatConfirmed = false;
+                sessionStorage.removeItem('seatNumber');
+                sessionStorage.removeItem('seatConfirmed');
 
-                // Update the confirmation box
+                // Update the confirmation box.
                 confirmSeatNumber.innerHTML = `${row}${seatLabel}`;
-                confirmButton.disabled = false; // Enable the confirm button after seat selection
+                confirmButton.disabled = false;
+                confirmButton.textContent = 'Confirm';
             }
         });
 
@@ -57,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const rowDiv = document.createElement('div');
         rowDiv.classList.add('seat-row');
 
-        // 1st column (2 seats)
+        // First seat group.
         const group1Div = document.createElement('div');
         group1Div.classList.add('seat-group');
         columns1And3.forEach(seatLabel => {
@@ -66,12 +84,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         rowDiv.appendChild(group1Div);
 
-        // Aisle after 1st column
+        // Aisle after first group.
         const aisleDiv1 = document.createElement('div');
         aisleDiv1.classList.add('aisle');
         rowDiv.appendChild(aisleDiv1);
 
-        // 2nd column (3 seats)
+        // Middle seat group.
         const group2Div = document.createElement('div');
         group2Div.classList.add('seat-group');
         columns2.forEach(seatLabel => {
@@ -80,12 +98,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         rowDiv.appendChild(group2Div);
 
-        // Aisle after 2nd column
+        // Aisle after middle group.
         const aisleDiv2 = document.createElement('div');
         aisleDiv2.classList.add('aisle');
         rowDiv.appendChild(aisleDiv2);
 
-        // 3rd column (2 seats with different seat labels)
+        // Last seat group.
         const group3Div = document.createElement('div');
         group3Div.classList.add('seat-group');
         columns3.forEach(seatLabel => {
@@ -96,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         seatGrid.appendChild(rowDiv);
 
-        // Adding a row gap after every 5th row
+        // Add a row gap after every 5th row.
         if (row % 5 === 0) {
             const gapDiv = document.createElement('div');
             gapDiv.classList.add('row-gap');
@@ -104,38 +122,103 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // When user confirms the seat
+    // Confirming locks the selected seat into sessionStorage for the next page.
     confirmButton.addEventListener('click', function() {
         if (selectedSeat) {
             const seatNumber = selectedSeat.textContent;
 
-            // Store the selected seat number in sessionStorage
+            // Store the selected seat number for the next pages.
             sessionStorage.setItem('seatNumber', seatNumber);
+            sessionStorage.setItem('seatConfirmed', 'true');
 
-            alert(`Seat ${seatNumber} has been confirmed.`);
-            confirmButton.disabled = true;  // Disable the confirm button after confirmation
+            const activeBookingReference = sessionStorage.getItem('activeBookingReference');
+            if (activeBookingReference) {
+                const bookings = JSON.parse(localStorage.getItem('flydreamairBookings') || '[]');
+                const updatedBookings = bookings.map(booking =>
+                    booking.bookingReference === activeBookingReference
+                        ? { ...booking, seatNumber, status: booking.status === 'Cancelled' ? 'Cancelled' : 'Confirmed' }
+                        : booking
+                );
+                localStorage.setItem('flydreamairBookings', JSON.stringify(updatedBookings));
+            }
+
+            console.log(`Seat ${seatNumber} has been confirmed.`);
+            confirmedSeat = seatNumber;
+            isSeatConfirmed = true;
+            alert(`Seat selection confirmed: ${seatNumber}`);
+            confirmButton.disabled = true;
+            confirmButton.textContent = `Confirmed ${seatNumber}`;
         }
     });
 
-    // Onboard services logic
+    // Set up the onboard services counters.
+    const servicePrices = {
+        'chocolate-bars-qty': 6,
+        'crackers-qty': 8,
+        'cookies-qty': 5,
+        'noodles-qty': 16,
+        'sandwiches-qty': 14,
+        'pasta-qty': 18,
+        'salads-qty': 12,
+        'coffee-tea-qty': 4,
+        'soft-drinks-qty': 5,
+        'water-qty': 3,
+        'juices-qty': 5
+    };
+
+    // Add the visible price under each item name.
+    function addServicePriceLabel(serviceId) {
+        const item = document.getElementById(serviceId);
+        if (!item) return;
+        const name = item.querySelector(':scope > span');
+        if (!name || item.querySelector('.service-price')) return;
+        const label = document.createElement('small');
+        label.className = 'service-price';
+        label.textContent = `$${servicePrices[serviceId].toFixed(2)}`;
+        name.appendChild(label);
+    }
+
+    // Create the extras total row.
+    function ensureExtrasTotal() {
+        let total = document.getElementById('onboard-services-total');
+        if (total) return total;
+        const servicesBox = document.querySelector('.onboard-services');
+        if (!servicesBox) return null;
+        const summary = document.createElement('div');
+        summary.className = 'extras-total-row';
+        summary.innerHTML = '<span>Extras Total</span><strong id="onboard-services-total">$0.00</strong>';
+        servicesBox.appendChild(summary);
+        return summary.querySelector('#onboard-services-total');
+    }
+
+    // Attach plus/minus behavior to one extras item.
     function handleCounter(serviceId) {
         const decreaseBtn = document.querySelector(`#${serviceId} .decrease`);
         const increaseBtn = document.querySelector(`#${serviceId} .increase`);
         const quantityDisplay = document.querySelector(`#${serviceId} .quantity`);
-        const serviceCostPerItem = 20;  // Cost per item is $20
+        const serviceCostPerItem = servicePrices[serviceId] || 0;
         let quantity = 0;
+
+        addServicePriceLabel(serviceId);
+
+        if (!decreaseBtn || !increaseBtn || !quantityDisplay) {
+            return {
+                getQuantity: () => 0,
+                getTotalCost: () => 0
+            };
+        }
 
         increaseBtn.addEventListener('click', () => {
             quantity++;
             quantityDisplay.textContent = quantity;
-            updateOnboardServicesTotal();  // Update the total when increasing quantity
+            updateOnboardServicesTotal();
         });
 
         decreaseBtn.addEventListener('click', () => {
             if (quantity > 0) {
                 quantity--;
                 quantityDisplay.textContent = quantity;
-                updateOnboardServicesTotal();  // Update the total when decreasing quantity
+                updateOnboardServicesTotal();
             }
         });
 
@@ -145,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // Initialize onboard services counters
+    // Initialize onboard services counters.
     const services = [
         'chocolate-bars-qty', 'crackers-qty', 'cookies-qty', 'noodles-qty',
         'sandwiches-qty', 'pasta-qty', 'salads-qty', 'coffee-tea-qty',
@@ -154,29 +237,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const serviceHandlers = services.map(serviceId => handleCounter(serviceId));
 
-    // Function to update the total cost of onboard services
+    // Recalculate the extras total and save it for the payment page.
     function updateOnboardServicesTotal() {
         const totalCost = serviceHandlers.reduce((sum, handler) => sum + handler.getTotalCost(), 0);
-        const onboardServicesTotalElement = document.getElementById('onboard-services-total');
+        const onboardServicesTotalElement = ensureExtrasTotal();
         
         if (onboardServicesTotalElement) {
-            onboardServicesTotalElement.textContent = `$${totalCost}`;
+            onboardServicesTotalElement.textContent = `$${totalCost.toFixed(2)}`;
         }
 
-        // Store the onboard services total in sessionStorage for use on the payment page
+        // Store the onboard services total for the payment page.
         sessionStorage.setItem('onboardServicesTotal', totalCost);
     }
 
-    // Continue to the next page (payment page)
-    document.getElementById('Continue').addEventListener('click', function() {
-        // Ensure the seat number is stored before continuing
-        const seatNumber = sessionStorage.getItem('seatNumber');
-        if (!seatNumber) {
+    // Add the extras total row before the user selects any extras.
+    ensureExtrasTotal();
+
+    // Continue button only proceeds after a seat has been confirmed.
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('#Continue')) return;
+        event.preventDefault();
+
+        // Make sure the seat number is stored before continuing.
+        const seatNumber = confirmedSeat || sessionStorage.getItem('seatNumber');
+        const confirmed = isSeatConfirmed || sessionStorage.getItem('seatConfirmed') === 'true';
+        if (!seatNumber || !confirmed) {
             alert('Please confirm your seat selection before continuing.');
+            console.log('Please confirm your seat selection before continuing.');
             return;
         }
 
-        // Redirect to the payment page
-        window.location.href = '../../cardDetails/html/cardDetails.html';  // Adjust this URL as needed
+        if (sessionStorage.getItem('activeBookingReference')) {
+            sessionStorage.removeItem('activeBookingReference');
+            console.log('Seat updated for this demo booking.');
+            window.location.assign('../../manageBooking/html/mb.html');
+            return;
+        }
+
+        // Redirect to the payment page.
+        window.location.assign('../../cardDetails/html/cardDetails.html'); 
     });
 });

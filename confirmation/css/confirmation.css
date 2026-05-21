@@ -34,32 +34,32 @@ a {
     background-color: #ffffff;
     border-bottom: 5px solid #283841;
 }
-/* Header Logo Styles */
+
 /* Header Logo Styles */
 .flydreamair-logo {
     display: flex;
-    flex-direction: column;  /* Stack Fly above DreamAir */
+    flex-direction: column;  
     align-items: flex-start;
     line-height: 1;
 }
 
 /* Style for the Fly text */
 .header-logo .fly {
-    font-family: 'Livvic', sans-serif;  /* Ensure the correct font is applied */
+    font-family: 'Livvic', sans-serif;  
     font-size: 24px;
     font-weight: 900;
     font-style: italic;
-    color: #000;  /* Ensure the correct color */
-    margin-bottom: -25px;  /* Adjust gap between Fly and DreamAir */
+    color: #000;  
+    margin-bottom: -25px;  
 }
 
 /* Style for the DreamAir text */
 .header-logo .dreamair {
-    font-family: 'Livvic', sans-serif;  /* Same font family */
+    font-family: 'Livvic', sans-serif;  
     font-size: 24px;
     font-weight: 900;
     font-style: italic;
-    color: #000;  /* Same color */
+    color: #000;
     margin-top: 10px;
 }
 
@@ -144,14 +144,14 @@ h1, h2 {
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 15px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);  /* Soft shadow */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* Reduced hover effect movement */
 .flight-summary:hover, .personal-details:hover {
-    transform: translateY(-5px);  /* Subtle lift */
-    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.15);  /* Slightly enhanced shadow */
+    transform: translateY(-5px);  
+    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.15);  
 }
 
 /* Flight Summary Header Style */
@@ -185,7 +185,7 @@ h1, h2 {
 
 /* Ensure label only changes color when its associated input is focused */
 .input-container:focus-within label {
-    color: #E8B749;  /* Change label color when input is focused */
+    color: #E8B749;  
 }
 
 /* Input field styling */
@@ -220,7 +220,7 @@ label {
 
 /* Confirmation Button */
 .confirm-btn {
-    background: linear-gradient(45deg, #E8B749, #F3C368);  /* Gradient background */
+    background: linear-gradient(45deg, #E8B749, #F3C368);  
     color: white;
     padding: 15px 25px;
     border: none;
@@ -232,11 +232,12 @@ label {
 
 /* Confirmation Button Hover */
 .confirm-btn:hover {
-    background: linear-gradient(45deg, #d1a43f, #e8b749);  /* Darker gradient */
-    transform: translateY(-2px);  /* Slight lift */
+    background: linear-gradient(45deg, #d1a43f, #e8b749);  
+    transform: translateY(-2px);  
 }
 
 /* Smooth transitions for all hover effects */
 .flight-summary, .personal-details, .confirm-btn, input, select {
     transition: all 0.3s ease;
 }
+

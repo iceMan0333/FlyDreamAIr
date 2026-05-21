@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -19,7 +20,10 @@
     <link rel="stylesheet" href="../css/seat.css">
     <link rel="stylesheet" href="../css/onboard-services.css">
     <link rel="stylesheet" href="../css/footer.css">
-    <link rel="stylesheet" href="../css/layout.css"> <!-- Additional layout-specific styles if necessary --> 
+    <link rel="stylesheet" href="../css/layout.css"> 
+    <link rel="stylesheet" href="../../theme.css">
+    <link rel="stylesheet" href="../../flydreamair-ui.css">
+    <script src="../../flydreamair-ui.js" defer></script>
 </head>
 <body>
     <!-- Header Section -->
@@ -30,13 +34,13 @@
                 <span class="dreamair">DreamAir</span>
             </div>
             <div class="deals-parent">
-                <div class="deals" id="help-link">Help</div>
-                <div class="deals" id="sign-in">Sign In</div>
-                
-                <!-- Sign Up Button -->
+                <a class="deals" id="home-link" href="../../index.html">Home</a>
+                <a class="deals" id="help-link" href="../../help/html/help.html">Help</a>
+                <a class="deals" id="sign-in" href="../../login/html/login.html">Sign In</a>
                 <div class="sign-up-wrapper">
-                    <div class="deals sign-up" id="sign-up">Sign Up</div>
+                    <a class="deals sign-up" id="sign-up" href="../../signup/html/signup.html">Sign Up</a>
                 </div>
+                <a class="deals manage-booking" id="mb" href="../../manageBooking/html/mb.html">Manage Booking</a>
             </div>
         </div>
     </header>
@@ -49,7 +53,7 @@
                 <h2>Select Your Seat</h2>
                 <div id="seat-grid" class="seat-grid"></div>
                 
-                <!-- Seat Confirmation Box (Newly Added) -->
+                <!-- Seat Confirmation Box  -->
                  <div class="seat-confirmation">
                     <p>Your selected seat number is: <span id="confirm-seat-number">None</span></p>
                     <button class="confirm-button" id="confirm-button" disabled>Confirm</button>
@@ -58,7 +62,7 @@
     
 
     
-            <!-- Onboard Services Box beside the confirmation section -->
+            <!-- Onboard Services Box -->
             <div class="onboard-services">
                 <h2>Extras</h2>
                 <!-- Snacks Section -->
@@ -163,6 +167,8 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="seat-page-actions">
                     <button class="continue-button" id="Continue">Continue</button>
                 </div>
 
@@ -231,6 +237,20 @@
 
     <!-- JavaScript Files -->
     <script src="../js/seat.js"></script>
-    <script src="../js/onboard-services.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const currentUser = JSON.parse(localStorage.getItem('flydreamairCurrentUser') || 'null');
+    const signIn = document.getElementById('sign-in');
+    const signUp = document.getElementById('sign-up');
+    if (currentUser && signIn) {
+        signIn.textContent = 'Profile';
+        signIn.href = signIn.getAttribute('href').replace('login/html/login.html', 'profile/html/profile.html');
+        signIn.title = 'View your profile';
+    }
+    if (currentUser && signUp) signUp.style.display = 'none';
+});
+</script>
+
 </body>
 </html>

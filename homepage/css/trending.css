@@ -15,10 +15,11 @@
     color: #E8B749;
 }
 
+/* Trending destination boxes*/
 .carousel-container {
     position: relative;
-    width: 100%; /* Adjust the width as needed */
-    max-width: 1300px; /* Make sure the container has a maximum width */
+    width: 100%; 
+    max-width: 1300px; 
     margin: 0 auto;
     overflow: hidden;
 }
@@ -29,7 +30,8 @@
 }
 
 .carousel-item {
-    min-width: 33.33%; /* Show three items at a time */
+    cursor: pointer;
+    min-width: 33.33%; 
     margin: 0 10px;
     position: relative;
     border-radius: 33.32px;
@@ -38,7 +40,7 @@
 
 .carousel-item img {
     width: 100%;
-    height: 508.2px; /* Same height for all images */
+    height: 508.2px; 
     object-fit: cover;
     border-radius: 33.32px;
 }
@@ -82,3 +84,8 @@
 .carousel-button:hover {
     background-color: #E8B749;
 }
+
+.carousel-item:hover {
+    transform: scale(0.99);
+}
+

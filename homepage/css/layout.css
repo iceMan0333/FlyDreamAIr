@@ -17,7 +17,8 @@ body {
 }
 .container {
     margin: 0 auto;
-    padding: 0; /* Ensure no padding in the container */
+    padding: 0; 
     width: 100%;
-    max-width: 1200px; /* set a max-width to ensure the content stays centered */
+    max-width: 1200px; 
 }
+

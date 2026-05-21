@@ -41,31 +41,36 @@ body {
     color: #333;
 }
 
+#login-form {
+    width: 100%;
+}
+
 /* Input Fields */
 .input-container {
     width: 100%;
     position: relative;
     margin-bottom: 24px;
     display: flex;
-    justify-content: center; /* Center the input inside the container */
+    justify-content: center;
 }
 
 .input-field {
     width: 100%;
-    max-width: 350px; /* Control max-width */
-    padding: 12px 15px 12px 45px; /* Room for icons */
+    max-width: 350px;
+    padding: 12px 15px 12px 45px;
     background: #F2F3F4;
     border-radius: 5px;
     border: 1px solid #BCBEC0;
     font-size: 14px;
     color: #333;
     outline: none;
+    box-sizing: border-box;
 }
 
 /* Input Icon */
 .input-icon {
     position: absolute;
-    top: 50%; /* Center the icon vertically */
+    top: 50%;
     left: 15px;
     transform: translateY(-50%);
     font-size: 18px;
@@ -92,7 +97,7 @@ body {
 /* Sign in Button */
 .signin-button {
     width: 100%;
-    max-width: 350px; /* Set the same max-width as input fields for consistency */
+    max-width: 350px;
     padding: 12px;
     background: #000;
     border: none;
@@ -107,54 +112,6 @@ body {
 
 .signin-button:hover {
     background: #333;
-}
-
-/* Or Continue */
-.or-continue {
-    font-size: 14px;
-    color: #333;
-    text-align: center;
-    margin: 20px 0;
-}
-
-/* Social Buttons */
-.social-buttons-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.social-btn {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.social-btn img {
-    width: 24px;
-    height: 24px;
-}
-
-.social-btn i {
-    color: white;
-}
-
-.social-btn.facebook {
-    background-color: #4267B2;
-}
-
-.social-btn.google {
-    background-color: white;
-    border: 1px solid #DB4437;
-}
-
-.social-btn:hover {
-    transform: scale(1.1);
 }
 
 /* Registration Prompt */
@@ -179,3 +136,4 @@ body {
     font-size: 12px;
     margin-top: 5px;
 }
+

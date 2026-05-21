@@ -62,7 +62,7 @@ a {
 .deals-parent {
     display: flex;
     align-items: center;
-    justify-content: flex-end; /* Aligns the text and buttons to the right */
+    justify-content: flex-end; 
     gap: 20px;
 }
 
@@ -111,14 +111,14 @@ a {
     cursor: pointer;
     padding: 10px 20px;
     border-radius: 20px;
-    border: 2px solid #283841; /* Border color matching the brand theme */
+    border: 2px solid #283841; 
     transition: background-color 0.3s ease, color 0.3s ease;
-    margin-left: 20px; /* Space between Sign Up and Manage Booking */
+    margin-left: 20px; 
 }
 
 .manage-booking:hover {
-    background-color: #283841; /* On hover, background becomes dark */
-    color: #fff; /* Text becomes white */
+    background-color: #283841; 
+    color: #fff;
 }
 
 /* Payment Success Section */
@@ -192,28 +192,28 @@ h2 {
 
 /* Download Buttons */
 .download-button {
-    background-color: #E8B749; /* Button background color (Bootstrap primary blue) */
-    color: white;              /* Text color */
-    padding: 10px 20px;        /* Padding for a decent button size */
-    border: none;              /* Remove default border */
-    border-radius: 5px;        /* Rounded corners */
-    font-size: 14px;           /* Button text size */
-    cursor: pointer;           /* Pointer cursor on hover */
-    transition: background-color 0.3s ease-in-out; /* Smooth background color transition */
-    margin: 10px 0;            /* Margin for spacing */
-    display: inline-block;     /* Inline-block for better control */
+    background-color: #E8B749;
+    color: white;           
+    padding: 10px 20px;        
+    border: none;              
+    border-radius: 5px;        
+    font-size: 14px;           
+    cursor: pointer;           
+    transition: background-color 0.3s ease-in-out; 
+    margin: 10px 0;            
+    display: inline-block;     
 }
 
 .download-button:hover {
-    background-color: #d1a43f; /* Darker blue on hover */
+    background-color: #d1a43f; 
 }
 
 .download-button:active {
-    background-color: #e0b142; /* Even darker blue when the button is clicked */
+    background-color: #e0b142; 
 }
 
 .download-button:focus {
-    outline: none; /* Remove focus outline */
+    outline: none; 
 }
 
 /* Back to Main Menu Button */
@@ -391,3 +391,4 @@ h2 {
 .footer-terms span:hover {
     text-decoration: underline;
 }
+

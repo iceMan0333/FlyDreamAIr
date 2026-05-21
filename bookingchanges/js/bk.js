@@ -1,26 +1,31 @@
+/*
+  Student project note:
+  This file is part of the FlyDreamAir front-end demo. It has been kept simple and clearly commented so the page logic and layout are easy to follow.
+*/
+
 document.addEventListener('DOMContentLoaded', function () {
     const seatGrid = document.getElementById('seat-grid');
     const confirmSeatNumber = document.getElementById('confirm-seat-number');
     const confirmButton = document.getElementById('confirm-button');
-    const currentSeatElement = document.getElementById('current-seat-number'); // Current seat display in confirmation box
+    const currentSeatElement = document.getElementById('current-seat-number'); 
     let selectedSeat = null;
 
-    // Retrieve passenger data from session storage
+    // Retrieve passenger data from sessionStorage.
     const passengerName = getPassengerName();
     const email = getPassengerEmail();
     const phoneNumber = getPassengerPhone();
-    let currentSeat = getSeatNumber(); // Retrieve the seat number from session storage
+    let currentSeat = getSeatNumber();
 
-    // Display the current seat number in the confirmation box if available
+    // Display the current seat number in the confirmation box.
     if (currentSeat) {
         currentSeatElement.textContent = currentSeat;
     }
 
-    // Populate passenger information fields
+    // Populate passenger information fields.
     populatePassengerInfo(passengerName, email, phoneNumber);
 
-    // Simplified assignment version: no database or backend request is used.
-    // Seat availability is stored locally in this file for demonstration purposes.
+
+    // Seat availability is stored locally in this file.
     const seatData = [
         {
                 "seatNumber": "1A",
@@ -304,33 +309,33 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 ];
 
-    generateSeatLayout(seatData, currentSeat); // Generate seat layout with the current seat highlighted
+    generateSeatLayout(seatData, currentSeat); 
 
-    // Function to generate the seat layout with correct seat labels
+    // Generate the seat layout with correct seat labels.
     function generateSeatLayout(seatData, currentSeat) {
         const rows = 10;
-        const columns1And3 = ['A', 'B']; // For 1st column (two seats per row)
-        const columns2 = ['D', 'E', 'F']; // For 2nd column (three seats per row)
-        const columns3 = ['H', 'J']; // For 3rd column (two seats per row with distinct labels)
+        const columns1And3 = ['A', 'B'];
+        const columns2 = ['D', 'E', 'F'];
+        const columns3 = ['H', 'J'];
 
         for (let row = 1; row <= rows; row++) {
             const rowDiv = document.createElement('div');
             rowDiv.classList.add('seat-row');
 
-            // Create seat groups: 1st column
+            // Create the first seat group.
             createSeatGroup(row, columns1And3, rowDiv, seatData, currentSeat);
             rowDiv.appendChild(createAisle());
 
-            // Create seat groups: 2nd column (middle)
+            // Create the middle seat group.
             createSeatGroup(row, columns2, rowDiv, seatData, currentSeat);
             rowDiv.appendChild(createAisle());
 
-            // Create seat groups: 3rd column with distinct labels
+            // Create the last seat group.
             createSeatGroup(row, columns3, rowDiv, seatData, currentSeat);
 
             seatGrid.appendChild(rowDiv);
 
-            // Add a gap after every 5th row
+            // Add a gap after every 5th row.
             if (row % 5 === 0) {
                 const gapDiv = document.createElement('div');
                 gapDiv.classList.add('row-gap');
@@ -339,7 +344,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Function to create individual seat groups and highlight current seat
+    // Create individual seat groups and highlight the current seat.
     function createSeatGroup(row, columns, rowDiv, seatData, currentSeat) {
         const groupDiv = document.createElement('div');
         groupDiv.classList.add('seat-group');
@@ -347,25 +352,25 @@ document.addEventListener('DOMContentLoaded', function () {
             const seatNumber = `${row}${column}`;
             const seatStatus = seatData.find(seat => seat.seatNumber === seatNumber)?.availability;
 
-            // Create the seat button element
+            // Create the seat button element.
             const seatButton = document.createElement('button');
             seatButton.classList.add('seat');
             seatButton.textContent = seatNumber;
 
-            // Apply styles for available, booked, or current seats
+            // Apply styles for available, booked, or current seats.
             if (seatStatus) {
                 seatButton.classList.add('available');
             } else {
                 seatButton.classList.add('booked');
-                seatButton.disabled = true; // Disable booked seats
+                seatButton.disabled = true;
             }
 
-            // Highlight the current seat with a special class
+            // Highlight the current seat with a special class.
             if (seatNumber === currentSeat) {
                 seatButton.classList.add('current-seat');
             }
 
-            // Add click event for available seats
+            // Allow available seats to be selected.
             seatButton.addEventListener('click', function () {
                 if (selectedSeat) {
                     selectedSeat.classList.remove('selected');
@@ -373,9 +378,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 seatButton.classList.add('selected');
                 selectedSeat = seatButton;
 
-                // Update confirmation box
+                // Update confirmation box.
                 confirmSeatNumber.textContent = seatNumber;
-                confirmButton.disabled = false; // Enable confirm button
+                confirmButton.disabled = false; 
             });
 
             groupDiv.appendChild(seatButton);
@@ -383,41 +388,41 @@ document.addEventListener('DOMContentLoaded', function () {
         rowDiv.appendChild(groupDiv);
     }
 
-    // Create aisle element
+    // Create an aisle space between seat groups.
     function createAisle() {
         const aisleDiv = document.createElement('div');
         aisleDiv.classList.add('aisle');
         return aisleDiv;
     }
 
-    // Function to populate the passenger information fields using session storage data
+    // Fill the passenger information fields using sessionStorage data.
     function populatePassengerInfo(name, email, phone) {
         document.getElementById('passenger-name').value = name || 'N/A';
         document.getElementById('email').value = email || 'N/A';
         document.getElementById('phone').value = phone || 'N/A';
     }
 
-    // Function to get the passenger name from sessionStorage
+    // Get the passenger name from sessionStorage.
     function getPassengerName() {
-        return sessionStorage.getItem('passengerName') || 'John Doe';  // Default name if not found
+    return sessionStorage.getItem('passengerName') || '';
     }
 
-    // Function to get the passenger email from sessionStorage
+    // Get the passenger email from sessionStorage.
     function getPassengerEmail() {
-        return sessionStorage.getItem('email') || 'example@example.com';  // Default email if not found
+        return sessionStorage.getItem('email') || '';  
     }
 
-    // Function to get the passenger phone number from sessionStorage
+    // Get the passenger phone number from sessionStorage.
     function getPassengerPhone() {
-        return sessionStorage.getItem('phone') || 'N/A';  // Default phone number if not found
+        return sessionStorage.getItem('phone') || '';  
     }
 
-    // Function to get the seat number from sessionStorage
+    // Get the seat number from sessionStorage.
     function getSeatNumber() {
-        return sessionStorage.getItem('seatNumber') || 'N/A';  // Return 'N/A' if no seat number is found
+        return sessionStorage.getItem('seatNumber') || '';  
     }
 
-    // Sidebar Navigation Click Events
+    // Switch between the sidebar sections.
     const sidebarItems = document.querySelectorAll('.sidebar-item');
     const contentSections = document.querySelectorAll('.content-section');
 
@@ -430,46 +435,45 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Set initial active section
+    // Set the initial active section.
     document.getElementById('seat-modification-tab').classList.add('active');
     document.getElementById('seat-modification-section').classList.add('active');
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Modal Elements
+    // Get modal elements.
     const modal = document.getElementById('modal');
     const modalMessage = document.getElementById('modal-message');
     const closeBtn = document.querySelector('.close-btn');
     const okBtn = document.getElementById('modal-ok-btn');
 
-    // Function to Show Modal with Message
+    // Show a modal message.
     function showModal(message, callback) {
-        modalMessage.textContent = message; // Set the message
-        modal.style.display = 'block'; // Show the modal
+        modalMessage.textContent = message; 
+        modal.style.display = 'block'; 
 
-        // Close Modal when clicking on 'OK' or 'X'
+       
         okBtn.onclick = closeBtn.onclick = function () {
             modal.style.display = 'none';
             if (callback) callback();
         };
     }
 
-    // Event Listener for Seat Change Confirmation
+    // Show a message after seat change confirmation.
     document.getElementById('confirm-button').addEventListener('click', function () {
         showModal('Your seat has been changed successfully!', function () {
-            // Optionally reset the selection state here
         });
     });
 
-    // Event Listener for Saving Personal Details
+    // Show a message after saving personal details.
     document.querySelector('.save-button').addEventListener('click', function () {
         showModal('Personal details updated successfully.');
     });
 
-    // Event Listener for Cancel Flight
+    // Show a message after cancelling the flight.
     document.querySelector('.cancel-button').addEventListener('click', function () {
         showModal('Your flight has been cancelled. You will receive a refund in 2-3 business days.', function () {
-            // Redirect to homepage after confirmation
+            // Redirect to homepage after confirmation.
             window.location.href = '../../index.html';
         });
     });

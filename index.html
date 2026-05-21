@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,13 +21,17 @@
     <link rel="stylesheet" href="homepage/css/booking.css">
     <!-- Trending CSS-->
      <link rel="stylesheet" href="homepage/css/trending.css">
-    <!-- Foother CSS-->
+    <!-- Footer CSS-->
      <link rel="stylesheet" href="homepage/css/footer.css">
+     <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="flydreamair-ui.css">
+    <script src="flydreamair-ui.js" defer></script>
 </head>
 <body>
+    <a class="skip-link" href="#booking">Skip to booking</a>
     <header>
         <div class="flydreamair-parent">
-            <!-- Logo with Fly and DreamAir on separate lines -->
+            <!-- Logo  -->
             <div class="flydreamair-logo header-logo">
                 <span class="fly">Fly</span><br>
                 <span class="dreamair">DreamAir</span>
@@ -34,37 +39,29 @@
 
             <!-- Navigation Menu aligned to the right -->
             <div class="deals-parent">
-                <div class="deals">Deals</div>
-                <div class="latest-updates">Latest Updates</div>
-                <div class="deals" id="our-destinations">Our Destinations</div>
-                <div class="deals">Flights</div>
-                <div class="deals" id="help-link">Help</div>
-                <div class="deals" id="sign-in">Sign In</div>
-                
-                <!-- Sign Up Button -->
+                <a class="deals" id="home-link" href="index.html">Home</a>
+                <a class="deals" id="help-link" href="help/html/help.html">Help</a>
+                <a class="deals" id="sign-in" href="login/html/login.html">Sign In</a>
                 <div class="sign-up-wrapper">
-                    <div class="deals sign-up" id="sign-up">Sign Up</div>
+                    <a class="deals sign-up" id="sign-up" href="signup/html/signup.html">Sign Up</a>
                 </div>
-            
-                <!-- Manage Booking Button -->
-                <div class="deals manage-booking" id="mb">Manage Booking</div>
+                <a class="deals manage-booking" id="mb" href="manageBooking/html/mb.html">Manage Booking</a>
             </div>
         </div>
-            
     </header>
         
         <!-- Image Section -->
         <div class="image-section">
-            <img src="homepage/images/backgroud.png" alt="City View" class="image-1-icon">
+            <img src="homepage/images/hero-plane-clouds.jpg" alt="FlyDreamAir airplane hero image" class="image-1-icon">
             <div class="text-overlay">
                 <div class="discover-your-next-container">
-                  <p class="discover-line-1">Discover Your Next Adventure</p>
-                  <p class="discover-line-2">With FlyDreamAir</p>
+                  <p class="discover-line-1">The Sky is</p>
+                  <p class="discover-line-2">Not The Limit</p>
                 </div>
             </div>
             
             <!-- Booking Form Section -->
-            <div class="booking-section">
+            <div class="booking-section" id="booking">
                 <div class="booking-box">
                     <div class="section-title">Book Your Flight</div>
                     
@@ -104,31 +101,9 @@
                         </div>
                     </div>
 
-                    <!-- Passenger Selection -->
-                    <div class="passenger-selection">
-                        <div class="passenger-counter">
-                            <span>Adults</span>
-                            <button id="adult-minus" class="minus">-</button>
-                            <span id="adult-count">1</span>
-                            <button id="adult-plus">+</button>
-                        </div>
-                        <div class="passenger-counter">
-                            <span>Children</span>
-                            <button id="child-minus" class="minus">-</button>
-                            <span id="child-count">0</span>
-                            <button id="child-plus">+</button>
-                        </div>
-                        <div class="passenger-counter">
-                            <span>Infants</span>
-                            <button id="infant-minus" class="minus">-</button>
-                            <span id="infant-count">0</span>
-                            <button id="infant-plus">+</button>
-                        </div>
-                    </div>
-
                     <!-- Search Button -->
                     <div class="search-button">
-                        <button>Search Flights</button>
+                        <button>Search Flights →</button>
                     </div>
                 </div>
             </div>
@@ -136,37 +111,61 @@
 
         <!-- Trending Destination Section -->
         <div class="trending-section">
-            <h2>Trending <span class="highlight">Destination</span> Now Days</h2>
-            
+            <div class="trending-heading-row">
+                <div>
+                    <h2>Trending <span class="highlight">Horizons</span></h2>
+                    <p class="trending-copy">Our curated selection of destinations currently capturing the hearts of global travelers. Explore the extraordinary.</p>
+                </div>
+                <a class="view-destinations-link" href="destinations/html/destination.html">View All Destinations →</a>
+            </div>
+
             <div class="carousel-container">
-                <button class="carousel-button left-arrow">&larr;</button>
-                <div class="carousel-slide">
-                    <div class="carousel-item">
-                        <div class="city-name">Paris</div>
+                <div class="carousel-slide destination-showcase">
+                    <div class="carousel-item featured-destination" data-destination="Paris">
                         <img src="homepage/images/paris.jpg" alt="Paris">
+                        <div class="destination-card-content">
+                            <span class="destination-badge">Featured</span>
+                            <div class="city-name">Paris, France</div>
+                            <p>Experience timeless boulevards, galleries, and skyline views.</p>
+                            <div class="destination-actions">
+                                <button type="button">Book Now</button>
+                                <span>From $850</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="carousel-item">
-                        <div class="city-name">Toronto</div>
-                        <img src="homepage/images/toronto.jpg" alt="Toronto">
+                    <div class="carousel-item" data-destination="Tokyo">
+                        <img src="destinations/images/tokyo.webp" alt="Tokyo">
+                        <div class="destination-card-content">
+                            <div class="city-name">Tokyo, Japan</div>
+                            <p>The collision of tradition and futurism.</p>
+                            <span class="destination-price">From $710</span>
+                        </div>
                     </div>
-                    <div class="carousel-item">
-                        <div class="city-name">Sydney</div>
-                        <img src="homepage/images/sydney.jpg" alt="Sydney">
+                    <div class="carousel-item" data-destination="Reykjavik">
+                        <img src="homepage/images/london.png" alt="Reykjavik">
+                        <div class="destination-card-content">
+                            <div class="city-name">Reykjavik, Iceland</div>
+                            <p>Chasing the northern lights.</p>
+                            <span class="destination-price">From $930</span>
+                        </div>
                     </div>
-                    <div class="carousel-item">
-                        <div class="city-name">London</div>
-                        <img src="homepage/images/london.png" alt="London">
+                    <div class="carousel-item" data-destination="Banff">
+                        <img src="homepage/images/sydney.jpg" alt="Banff">
+                        <div class="destination-card-content">
+                            <div class="city-name">Banff, Canada</div>
+                            <p>Pristine nature and turquoise lakes.</p>
+                            <span class="destination-price">From $770</span>
+                        </div>
                     </div>
-                    <div class="carousel-item">
-                        <div class="city-name">Jakarta</div>
-                        <img src="homepage/images/jakarta.png" alt="Jakarta">
-                    </div>
-                    <div class="carousel-item">
-                        <div class="city-name">Dubai</div>
+                    <div class="carousel-item" data-destination="Dubai">
                         <img src="homepage/images/dubai.png" alt="Dubai">
+                        <div class="destination-card-content">
+                            <div class="city-name">Dubai, UAE</div>
+                            <p>Skyline luxury, desert sunsets, and world-class shopping.</p>
+                            <span class="destination-price">From $660</span>
+                        </div>
                     </div>
                 </div>
-                <button class="carousel-button right-arrow">&rarr;</button>
             </div>
         </div>
 
@@ -216,9 +215,9 @@
                 </div>
                 <!-- Social Icons using Font Awesome -->
                 <div class="social-icons">
-                    <a href="#" class="social-icon"><i class="fab fa-x"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon" aria-label="Follow FlyDreamAir on X"><i class="fab fa-x" aria-hidden="true"></i></a>
+                    <a href="#" class="social-icon" aria-label="Follow FlyDreamAir on Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                    <a href="#" class="social-icon" aria-label="Follow FlyDreamAir on Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
                 </div>
             </div>
             <div class="footer-divider"></div>
@@ -230,5 +229,20 @@
         </div>
     <!-- Script -->
     <script src="homepage/js/script.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const currentUser = JSON.parse(localStorage.getItem('flydreamairCurrentUser') || 'null');
+    const signIn = document.getElementById('sign-in');
+    const signUp = document.getElementById('sign-up');
+    if (currentUser && signIn) {
+        signIn.textContent = 'Profile';
+        signIn.href = signIn.getAttribute('href').replace('login/html/login.html', 'profile/html/profile.html');
+        signIn.title = 'View your profile';
+    }
+    if (currentUser && signUp) signUp.style.display = 'none';
+});
+</script>
+
 </body>
 </html>
