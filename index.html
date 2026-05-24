@@ -82,13 +82,11 @@
                         <div class="input-wrapper">
                             <label for="from">From</label>
                             <input type="text" id="from" class="city-input" placeholder="Airport or Cities">
-                            <ul id="from-suggestions" class="suggestions-list"></ul> <!-- Suggestions for "From" -->
                         </div>
                         
                         <div class="input-wrapper">
                             <label for="to">To</label>
                             <input type="text" id="to" class="city-input" placeholder="Airport or Cities">
-                            <ul id="to-suggestions" class="suggestions-list"></ul> <!-- Suggestions for "To" -->
                         </div>                        
 
                         <div class="input-wrapper">
@@ -98,6 +96,10 @@
                         <div class="input-wrapper" id="return-date">
                             <label for="return-date-input" style="display: block;">Return When?</label>
                             <input type="date" id="return-date-input" class="date-input">
+                        </div>
+                        <div class="input-wrapper">
+                            <label for="passenger-count" style="display: block;">Passengers</label>
+                            <input type="number" id="passenger-count" class="date-input" min="1" max="9" value="1">
                         </div>
                     </div>
 
@@ -116,7 +118,6 @@
                     <h2>Trending <span class="highlight">Horizons</span></h2>
                     <p class="trending-copy">Our curated selection of destinations currently capturing the hearts of global travelers. Explore the extraordinary.</p>
                 </div>
-                <a class="view-destinations-link" href="destinations/html/destination.html">View All Destinations →</a>
             </div>
 
             <div class="carousel-container">
@@ -216,7 +217,6 @@
                 <!-- Social Icons using Font Awesome -->
                 <div class="social-icons">
                     <a href="#" class="social-icon" aria-label="Follow FlyDreamAir on X"><i class="fab fa-x" aria-hidden="true"></i></a>
-                    <a href="#" class="social-icon" aria-label="Follow FlyDreamAir on Facebook"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
                     <a href="#" class="social-icon" aria-label="Follow FlyDreamAir on Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
                 </div>
             </div>

@@ -9,8 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const bookingSection = document.querySelector('.booking-section');
     const fromInput = document.getElementById('from');
     const toInput = document.getElementById('to');
-    const fromSuggestions = document.getElementById('from-suggestions');
-    const toSuggestions = document.getElementById('to-suggestions');
 
     if (window.location.hash === '#booking' && bookingSection) {
         setTimeout(() => bookingSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
@@ -21,23 +19,36 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(email ? 'Thank you for subscribing to FlyDreamAir updates.' : 'Please enter your email address.');
     });
 
+    function updateReturnDateVisibility() {
+        const tripType = document.querySelector('input[name="trip"]:checked')?.value || 'round-trip';
+        const returnDate = document.getElementById('return-date');
+        const returnDateInput = document.getElementById('return-date-input');
+
+        if (returnDate) returnDate.style.display = tripType === 'one-way' ? 'none' : 'block';
+        if (tripType === 'one-way' && returnDateInput) returnDateInput.value = '';
+    }
+
     document.querySelectorAll('input[name="trip"]').forEach((radio) => {
-        radio.addEventListener('change', function() {
-            const returnDate = document.getElementById('return-date');
-            if (returnDate) returnDate.style.display = this.value === 'one-way' ? 'none' : 'block';
-        });
+        radio.addEventListener('change', updateReturnDateVisibility);
     });
+    updateReturnDateVisibility();
 
     function cleanDestinationName(value) {
         return (value || '').split(',')[0].trim();
     }
 
     // Build the flight results URL using only the fields shown in the demo.
-    function buildFlightUrl(fromCity, toCity, departDate, returnDate, tripType, mode) {
+    function getPassengerCount() {
+        const passengerCount = parseInt(document.getElementById('passenger-count')?.value || '1', 10);
+        return Math.min(Math.max(passengerCount || 1, 1), 9);
+    }
+
+    function buildFlightUrl(fromCity, toCity, departDate, returnDate, tripType, mode, passengerCount) {
         let url = `selectFlight/html/selection.html?from=${encodeURIComponent(cleanDestinationName(fromCity))}&departDate=${encodeURIComponent(departDate)}&tripType=${encodeURIComponent(tripType)}`;
         if (toCity) url += `&to=${encodeURIComponent(cleanDestinationName(toCity))}`;
         if (mode) url += `&mode=${encodeURIComponent(mode)}`;
         if (tripType === 'round-trip' && returnDate) url += `&returnDate=${encodeURIComponent(returnDate)}`;
+        url += `&passengers=${encodeURIComponent(passengerCount || 1)}`;
         return url;
     }
 
@@ -47,71 +58,43 @@ document.addEventListener('DOMContentLoaded', function() {
         return d.toISOString().split('T')[0];
     }
 
-    // Search button. Blank destination shows all trending flights from Sydney.
+    // Search button. Both cities are required before showing flights.
     document.querySelector('.search-button button')?.addEventListener('click', function() {
-        const fromCity = fromInput?.value.trim() || 'Sydney';
+        const fromCity = fromInput?.value.trim();
         const toCity = toInput?.value.trim();
         const departDate = document.getElementById('depart-date')?.value || defaultFutureDate(7);
-        const returnDate = document.getElementById('return-date-input')?.value || defaultFutureDate(14);
         const tripType = document.querySelector('input[name="trip"]:checked')?.value || 'round-trip';
+        const returnDate = tripType === 'round-trip'
+            ? (document.getElementById('return-date-input')?.value || defaultFutureDate(14))
+            : '';
+        const passengerCount = getPassengerCount();
+
+        if (!fromCity || !toCity) {
+            alert('Please enter both departure and destination cities.');
+            return;
+        }
 
         if (toCity && cleanDestinationName(fromCity).toLowerCase() === cleanDestinationName(toCity).toLowerCase()) {
             alert('Please choose different departure and arrival cities.');
             return;
         }
 
-        const searchMode = toCity ? 'single-route' : 'all-trending';
+        if (tripType === 'round-trip' && new Date(returnDate) < new Date(departDate)) {
+            alert('Please choose a return date after your departure date.');
+            return;
+        }
+
+        const searchMode = 'single-route';
         sessionStorage.setItem('flightData', JSON.stringify({
             fromCity: cleanDestinationName(fromCity),
-            toCity: toCity ? cleanDestinationName(toCity) : 'Trending destinations',
+            toCity: cleanDestinationName(toCity),
             departDate,
             returnDate,
             tripType,
+            passengerCount,
             mode: searchMode
         }));
-        window.location.href = buildFlightUrl(fromCity, toCity, departDate, returnDate, tripType, searchMode);
-    });
-
-    const CITY_SUGGESTIONS = ['Sydney', 'Melbourne', 'Brisbane', 'Perth', 'Adelaide', 'Canberra', 'Hobart', 'Darwin', 'Gold Coast', 'Auckland', 'Wellington', 'Tokyo', 'Singapore', 'Jakarta', 'Bangkok', 'Dubai', 'London', 'Paris', 'New York', 'Los Angeles', 'Toronto'];
-
-    // Use a local list for autocomplete instead of an external API.
-    function fetchCitySuggestions(query) {
-        const searchText = query.trim().toLowerCase();
-        if (!searchText) return [];
-        return CITY_SUGGESTIONS.filter(city => city.toLowerCase().startsWith(searchText)).slice(0, 6);
-    }
-
-    // Show matching city suggestions under the input box.
-    function showSuggestions(inputElement, suggestionElement, suggestions) {
-        if (!inputElement || !suggestionElement) return;
-        suggestionElement.innerHTML = '';
-        suggestionElement.style.display = suggestions.length ? 'block' : 'none';
-        suggestions.forEach(suggestion => {
-            const li = document.createElement('li');
-            li.textContent = suggestion;
-            li.addEventListener('click', () => {
-                inputElement.value = suggestion;
-                suggestionElement.innerHTML = '';
-                suggestionElement.style.display = 'none';
-            });
-            suggestionElement.appendChild(li);
-        });
-    }
-
-    // Show suggestions while typing in the From and To fields.
-    fromInput?.addEventListener('focus', () => { if (toSuggestions) { toSuggestions.innerHTML = ''; toSuggestions.style.display = 'none'; } });
-    toInput?.addEventListener('focus', () => { if (fromSuggestions) { fromSuggestions.innerHTML = ''; fromSuggestions.style.display = 'none'; } });
-    fromInput?.addEventListener('input', () => showSuggestions(fromInput, fromSuggestions, fromInput.value.length >= 2 ? fetchCitySuggestions(fromInput.value) : []));
-    toInput?.addEventListener('input', () => showSuggestions(toInput, toSuggestions, toInput.value.length >= 2 ? fetchCitySuggestions(toInput.value) : []));
-
-    // Hide suggestion boxes when the user clicks somewhere else.
-    document.addEventListener('click', function(event) {
-        if (fromInput && fromSuggestions && !fromInput.contains(event.target) && !fromSuggestions.contains(event.target)) {
-            fromSuggestions.innerHTML = ''; fromSuggestions.style.display = 'none';
-        }
-        if (toInput && toSuggestions && !toInput.contains(event.target) && !toSuggestions.contains(event.target)) {
-            toSuggestions.innerHTML = ''; toSuggestions.style.display = 'none';
-        }
+        window.location.href = buildFlightUrl(fromCity, toCity, departDate, returnDate, tripType, searchMode, passengerCount);
     });
 
     const slide = document.querySelector('.carousel-slide');
@@ -135,9 +118,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!destination) return;
             const fromCity = 'Sydney';
             const departDate = defaultFutureDate(7);
-            const returnDate = defaultFutureDate(14);
-            sessionStorage.setItem('flightData', JSON.stringify({ fromCity, toCity: destination, departDate, returnDate, tripType: 'round-trip' }));
-            window.location.href = buildFlightUrl(fromCity, destination, departDate, returnDate, 'round-trip', 'single-route');
+            sessionStorage.setItem('flightData', JSON.stringify({ fromCity, toCity: destination, departDate, returnDate: '', tripType: 'one-way', passengerCount: 1 }));
+            window.location.href = buildFlightUrl(fromCity, destination, departDate, '', 'one-way', 'single-route', 1);
         });
     });
     window.addEventListener('resize', updateCarouselPosition);

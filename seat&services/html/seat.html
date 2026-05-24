@@ -5,28 +5,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seat Selection</title>
+    <link rel="stylesheet" href="../css/header.css">
     <link rel="stylesheet" href="../css/seat.css">
     <link rel="stylesheet" href="../../theme.css">
     <link rel="stylesheet" href="../../flydreamair-ui.css">
+    <script src="../../flydreamair-ui.js" defer></script>
 </head>
 <body>
+    <header>
+        <div class="flydreamair-parent">
+            <div class="flydreamair-logo header-logo">
+                <span class="fly">Fly</span><br>
+                <span class="dreamair">DreamAir</span>
+            </div>
+            <div class="deals-parent">
+                <a class="deals" id="home-link" href="../../index.html">Home</a>
+                <a class="deals" id="help-link" href="../../help/html/help.html">Help</a>
+                <a class="deals" id="sign-in" href="../../login/html/login.html">Sign In</a>
+                <div class="sign-up-wrapper">
+                    <a class="deals sign-up" id="sign-up" href="../../signup/html/signup.html">Sign Up</a>
+                </div>
+                <a class="deals manage-booking" id="mb" href="../../manageBooking/html/mb.html">Manage Booking</a>
+            </div>
+        </div>
+    </header>
+
     <div class="container">
         <div class="main-content">
             <!-- Seat selection grid on the left -->
             <div class="seat-selection-box">
                 <h2>Select Your Seat</h2>
                 <div id="seat-grid" class="seat-grid"></div>
-                <div id="selected-seat" class="seat-info">Selected Seat: <span>None</span></div>
             </div>
 
             <!-- New Box for Confirming Seat -->
-            <div class="confirm-box">
-                <p>Your selected seat number is: <span id="confirm-seat-number"></span></p>
+            <div class="seat-confirmation">
+                <p>Your selected seat number(s): <span id="confirm-seat-number">None</span></p>
                 <button class="confirm-button" id="confirm-button" disabled>Confirm</button>
+                <button class="continue-button" id="Continue">Continue</button>
             </div>
         </div>
     </div>
 
     <script src="../js/seat.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const currentUser = JSON.parse(localStorage.getItem('flydreamairCurrentUser') || 'null');
+        const signIn = document.getElementById('sign-in');
+        const signUp = document.getElementById('sign-up');
+        if (currentUser && signIn) {
+            signIn.textContent = 'Profile';
+            signIn.href = signIn.getAttribute('href').replace('login/html/login.html', 'profile/html/profile.html');
+            signIn.title = 'View your profile';
+        }
+        if (currentUser && signUp) signUp.style.display = 'none';
+    });
+    </script>
 </body>
 </html>

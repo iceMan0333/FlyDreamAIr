@@ -53,7 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h2>${booking.fromCity} to ${booking.toCity}</h2>
                 <p><strong>Status:</strong> ${booking.status}</p>
                 <p><strong>Booking Reference:</strong> ${booking.bookingReference}</p>
-                <p><strong>Passenger:</strong> ${booking.passengerName}</p>
+                <p><strong>Passenger${Number(booking.passengerCount || 1) > 1 ? 's' : ''}:</strong> ${booking.passengers?.length ? booking.passengers.map(passenger => passenger.fullName).join(', ') : booking.passengerName}</p>
+                <p><strong>Passenger Count:</strong> ${booking.passengerCount || 1}</p>
                 <p><strong>Departure Date:</strong> ${booking.departDate}</p>
                 ${booking.returnDate ? `<p><strong>Return Date:</strong> ${booking.returnDate}</p>` : ''}
                 <p><strong>Flight:</strong> ${booking.departureTime || 'Selected flight'}</p>
@@ -94,8 +95,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
 
                 localStorage.setItem('flydreamairBookings', JSON.stringify(updatedBookings));
-                showManageMessage('Booking cancelled for demo purposes.');
-                window.location.reload();
+                alert('Flight cancelled');
+                window.location.href = '../../index.html';
             });
         });
 
@@ -111,7 +112,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     toCity: booking.toCity,
                     departDate: booking.departDate,
                     returnDate: booking.returnDate,
-                    tripType: booking.tripType
+                    tripType: booking.tripType,
+                    passengerCount: booking.passengerCount || 1
                 }));
 
                 showManageMessage('Choose a new seat on the seat selection page.');

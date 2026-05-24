@@ -41,6 +41,7 @@ function displayDynamicTicketInfo() {
     const seatNumber = getSeatNumber();
     const flightFare = getFlightFare();
     const onboardServicesTotal = getOnboardServicesTotal();
+    const passengers = JSON.parse(sessionStorage.getItem('passengers') || '[]');
 
     if (!flightDetails) {
         console.log('No flight data found. Please start your booking process again.');
@@ -55,9 +56,11 @@ function displayDynamicTicketInfo() {
     // Update the ticket details with the saved booking data.
     document.querySelector('.ticket-details').innerHTML = `
         <p><strong>Flight:</strong> ${flightRoute}</p>
+        <p><strong>Trip Type:</strong> ${flightDetails.tripType === 'round-trip' ? 'Round Trip' : 'One Way'}</p>
         <p><strong>Date:</strong> ${flightDetails.departDate}</p>
+        ${flightDetails.returnDate ? `<p><strong>Return Date:</strong> ${flightDetails.returnDate}</p>` : ''}
         <p><strong>Class:</strong> Economy</p>
-        <p><strong>Passenger Name:</strong> ${passengerName}</p>
+        <p><strong>Passenger${passengers.length > 1 ? 's' : ''}:</strong> ${passengers.length ? passengers.map(passenger => passenger.fullName).join(', ') : passengerName}</p>
         <p><strong>Seat Number:</strong> ${seatNumber}</p>
         <p><strong>Booking Reference:</strong> ${sessionStorage.getItem('latestBookingReference') || 'AJF5012464'}</p>
     `;

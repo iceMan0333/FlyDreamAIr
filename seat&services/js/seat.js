@@ -22,11 +22,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const seatGrid = document.getElementById('seat-grid');
     const confirmSeatNumber = document.getElementById('confirm-seat-number');
     const confirmButton = document.getElementById('confirm-button');
-    let selectedSeat = null;
-    let confirmedSeat = null;
+    const flightData = JSON.parse(sessionStorage.getItem('flightData') || 'null');
+    const passengerCount = Math.min(Math.max(parseInt(flightData?.passengerCount || '1', 10) || 1, 1), 9);
+    const selectedSeats = [];
+    let confirmedSeat = '';
     let isSeatConfirmed = false;
     sessionStorage.removeItem('seatNumber');
     sessionStorage.removeItem('seatConfirmed');
+
+    function updateSeatSummary() {
+        confirmSeatNumber.innerHTML = selectedSeats.length ? selectedSeats.join(', ') : 'None';
+        confirmButton.disabled = selectedSeats.length !== passengerCount;
+        confirmButton.textContent = selectedSeats.length === passengerCount
+            ? `Confirm ${selectedSeats.length} seat${selectedSeats.length > 1 ? 's' : ''}`
+            : `Select ${passengerCount - selectedSeats.length} more`;
+    }
 
     const rows = 10;
     const columns1And3 = ['A', 'B'];
@@ -51,20 +61,28 @@ document.addEventListener('DOMContentLoaded', function() {
         // Select this seat when the user clicks it.
         seatButton.addEventListener('click', function() {
             if (!seatButton.classList.contains('booked')) {
-                if (selectedSeat) {
-                    selectedSeat.classList.remove('selected');
+                const seatNumber = `${row}${seatLabel}`;
+                const existingIndex = selectedSeats.indexOf(seatNumber);
+
+                if (existingIndex >= 0) {
+                    selectedSeats.splice(existingIndex, 1);
+                    seatButton.classList.remove('selected');
+                } else {
+                    if (selectedSeats.length >= passengerCount) {
+                        alert(`You can select ${passengerCount} seat${passengerCount > 1 ? 's' : ''} for this booking.`);
+                        return;
+                    }
+
+                    selectedSeats.push(seatNumber);
+                    seatButton.classList.add('selected');
                 }
-                seatButton.classList.add('selected');
-                selectedSeat = seatButton;
+
                 confirmedSeat = null;
                 isSeatConfirmed = false;
                 sessionStorage.removeItem('seatNumber');
                 sessionStorage.removeItem('seatConfirmed');
 
-                // Update the confirmation box.
-                confirmSeatNumber.innerHTML = `${row}${seatLabel}`;
-                confirmButton.disabled = false;
-                confirmButton.textContent = 'Confirm';
+                updateSeatSummary();
             }
         });
 
@@ -122,10 +140,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    updateSeatSummary();
+
     // Confirming locks the selected seat into sessionStorage for the next page.
     confirmButton.addEventListener('click', function() {
-        if (selectedSeat) {
-            const seatNumber = selectedSeat.textContent;
+        if (selectedSeats.length === passengerCount) {
+            const seatNumber = selectedSeats.join(', ');
 
             // Store the selected seat number for the next pages.
             sessionStorage.setItem('seatNumber', seatNumber);
@@ -274,7 +294,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Redirect to the payment page.
-        window.location.assign('../../cardDetails/html/cardDetails.html'); 
+        sessionStorage.setItem('onboardServicesTotal', sessionStorage.getItem('onboardServicesTotal') || '0');
+
+        // Continue to passenger confirmation after the seat is selected.
+        window.location.assign('../../confirmation/html/confirmation.html'); 
     });
 });

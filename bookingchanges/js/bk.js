@@ -472,9 +472,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Show a message after cancelling the flight.
     document.querySelector('.cancel-button').addEventListener('click', function () {
-        showModal('Your flight has been cancelled. You will receive a refund in 2-3 business days.', function () {
-            // Redirect to homepage after confirmation.
+        showModal('Flight cancelled');
+        setTimeout(function () {
             window.location.href = '../../index.html';
-        });
+        }, 1200);
     });
 });

@@ -110,47 +110,6 @@ body {
     background: #333;
 }
 
-/* Social Buttons */
-.social-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.social-btn {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.social-btn img {
-    width: 24px;
-    height: 24px;
-}
-
-.social-btn i {
-    color: white;
-}
-
-.social-btn.facebook {
-    background-color: #316FF6;
-    border: 1px solid #316FF6;
-}
-
-.social-btn.google {
-    background-color: white;
-    border: 1px solid #DB4437;
-}
-
-.social-btn:hover {
-    transform: scale(1.1);
-}
-
 /* Footer Text */
 .footer-text {
     font-size: 14px;

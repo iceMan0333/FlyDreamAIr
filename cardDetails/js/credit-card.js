@@ -39,6 +39,8 @@ function saveDemoBooking() {
 
     const flightFare = sessionStorage.getItem('flightFare') || '0';
     const onboardServicesTotal = sessionStorage.getItem('onboardServicesTotal') || '0';
+    const passengers = JSON.parse(sessionStorage.getItem('passengers') || '[]');
+    const passengerCount = Math.min(Math.max(parseInt(flightData.passengerCount || passengers.length || '1', 10) || 1, 1), 9);
     const taxes = 50;
     const totalPaid = parseFloat(flightFare || 0) + parseFloat(onboardServicesTotal || 0) + taxes;
     const bookingReference = 'FDA' + Date.now().toString().slice(-7);
@@ -48,6 +50,8 @@ function saveDemoBooking() {
         bookingReference,
         ownerEmail: currentUser ? currentUser.email : 'guest',
         passengerName: sessionStorage.getItem('passengerName') || (currentUser ? currentUser.username : 'Guest Passenger'),
+        passengers,
+        passengerCount,
         email: sessionStorage.getItem('email') || (currentUser ? currentUser.email : ''),
         phone: sessionStorage.getItem('phone') || (currentUser ? currentUser.phone : ''),
         fromCity: flightData.fromCity,

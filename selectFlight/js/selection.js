@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const departDate = urlParams.get('departDate') || '';
     const returnDate = urlParams.get('returnDate') || '';
     const tripType = urlParams.get('tripType') || 'one-way';
-    const mode = urlParams.get('mode') || (selectedToCity ? 'single-route' : 'all-trending');
+    const passengerCount = Math.min(Math.max(parseInt(urlParams.get('passengers') || '1', 10) || 1, 1), 9);
+    const mode = 'single-route';
 
     const departureDate = document.getElementById('departure-date');
     const returnDateInput = document.getElementById('return-date');
@@ -27,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.results')?.insertBefore(selectedFlightDisplay, showMore || null);
     selectedFlightDisplay.id = 'selected-flight';
 
-    const trendingDestinations = ['Paris', 'Tokyo', 'Reykjavik', 'Banff', 'Dubai'];
     const flightTimes = [
         ['8:15 AM', '9:50 AM'],
         ['9:00 AM', '10:35 AM'],
@@ -86,22 +86,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }));
     }
 
-    // Build either one route or all trending destination routes.
+    // Build flights for the selected route.
     function buildFlightList() {
-        if (mode === 'all-trending' && !selectedToCity) {
-            return trendingDestinations.flatMap(destination => createFlightsForDestination(destination));
-        }
         return createFlightsForDestination(selectedToCity || 'Melbourne');
     }
 
     // Create one flight card and attach its click events.
     function createFlightCard(flight) {
         const card = document.createElement('div');
+        const tripMultiplier = tripType === 'round-trip' ? 2 : 1;
+        const totalPrice = flight.price * tripMultiplier * passengerCount;
         card.className = 'flight-card';
         card.dataset.from = flight.fromCity;
         card.dataset.to = flight.toCity;
-        card.dataset.price = String(flight.price);
+        card.dataset.price = String(totalPrice);
+        card.dataset.basePrice = String(flight.price);
         card.dataset.departureTime = `${flight.fromCity} ${flight.departTime} -> ${flight.toCity} ${flight.arriveTime}`;
+        card.dataset.returnTime = tripType === 'round-trip'
+            ? `${flight.toCity} ${flight.arriveTime} -> ${flight.fromCity} ${flight.departTime}`
+            : '';
 
         card.innerHTML = `
             <div>
@@ -109,9 +112,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     <span class="flight-route-text">${flight.fromCity} ${flight.departTime} -> ${flight.toCity} ${flight.arriveTime}</span>
                     <span class="flight-date">${formatDisplayDate(departDate)}</span>
                 </div>
+                ${tripType === 'round-trip' ? `
+                    <div class="flight-time">
+                        <span class="flight-route-text">${flight.toCity} ${flight.arriveTime} -> ${flight.fromCity} ${flight.departTime}</span>
+                        <span class="flight-date">${formatDisplayDate(returnDate)}</span>
+                    </div>
+                ` : ''}
             </div>
             <div class="flight-price">
-                <div>$${flight.price}</div>
+                <div>$${totalPrice}</div>
+                <small>${passengerCount} passenger${passengerCount > 1 ? 's' : ''}${tripType === 'round-trip' ? ', round trip' : ''}</small>
                 <button class="select-btn">Select</button>
             </div>
         `;
@@ -120,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
         card.querySelector('.select-btn')?.addEventListener('click', function(event) {
             event.stopPropagation();
             selectFlight(card);
-            const nextUrl = '../../confirmation/html/confirmation.html';
+            const nextUrl = '../../seat&services/html/seat&service.html';
             if (!requireLoginForBooking(nextUrl)) return;
             window.location.href = nextUrl;
         });
@@ -137,36 +147,41 @@ document.addEventListener('DOMContentLoaded', function() {
         if (showMore) showMore.style.display = visibleCount < allFlights.length ? '' : 'none';
     }
 
-    // Save the selected card details for the confirmation page.
+    // Save the selected card details for the next booking pages.
     function selectFlight(card) {
         document.querySelectorAll('.flight-card').forEach(item => item.classList.remove('selected'));
         card.classList.add('selected');
 
         const price = card.dataset.price || '230';
+        const basePrice = card.dataset.basePrice || price;
         const departureTime = card.dataset.departureTime || '';
+        const returnTime = card.dataset.returnTime || '';
         const cardFromCity = card.dataset.from || fromCity;
         const cardToCity = card.dataset.to || selectedToCity || 'Melbourne';
 
-        selectedFlightDisplay.textContent = `Selected Flight: ${departureTime}, Price: $${price}`;
+        selectedFlightDisplay.textContent = `Selected Flight: ${departureTime}${returnTime ? ` | Return: ${returnTime}` : ''}, Total: $${price}`;
         selectedFlightDisplay.style.fontWeight = 'bold';
         selectedFlightDisplay.style.marginTop = '20px';
 
         sessionStorage.setItem('flightFare', price);
+        sessionStorage.setItem('baseFlightFare', basePrice);
         sessionStorage.setItem('departureTime', departureTime);
-        sessionStorage.setItem('returnTime', '');
+        sessionStorage.setItem('returnTime', returnTime);
         sessionStorage.setItem('selectedRoute', JSON.stringify({
             fromCity: cardFromCity,
             toCity: cardToCity,
             departDate,
             returnDate,
-            tripType
+            tripType,
+            passengerCount
         }));
         sessionStorage.setItem('flightData', JSON.stringify({
             fromCity: cardFromCity,
             toCity: cardToCity,
             departDate,
             returnDate,
-            tripType
+            tripType,
+            passengerCount
         }));
     }
 
